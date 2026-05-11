@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoFy.Mobile.Views.AddReminderView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Напомняне"
+    BackgroundColor="#F3F4F6">
+
+    <ScrollView>
+
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="18">
+
+            <!-- Header -->
+            <VerticalStackLayout Spacing="4">
+
+                <Label
+                    Text="Добави напомняне"
+                    FontSize="30"
+                    FontAttributes="Bold"
+                    TextColor="#111827" />
+
+                <Label
+                    Text="Създай напомняне за автомобил."
+                    FontSize="14"
+                    TextColor="#6B7280" />
+
+            </VerticalStackLayout>
+
+            <!-- Form -->
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 24"
+                Padding="16">
+
+                <VerticalStackLayout Spacing="16">
+
+                    <Picker
+                        Title="Автомобил"
+                        SelectedItem="{Binding SelectedVehicle}" />
+
+                    <Picker
+                        Title="Тип напомняне"
+                        SelectedItem="{Binding ReminderType}">
+
+                        <Picker.Items>
+                            <x:String>Технически преглед</x:String>
+                            <x:String>Гражданска отговорност</x:String>
+                            <x:String>Винетка</x:String>
+                            <x:String>Пожарогасител</x:String>
+                            <x:String>Обслужване</x:String>
+                            <x:String>Сервиз</x:String>
+                            <x:String>Друго</x:String>
+                        </Picker.Items>
+
+                    </Picker>
+
+                    <DatePicker
+                        Date="{Binding ReminderDate}" />
+
+                    <Editor
+                        Placeholder="Бележка"
+                        AutoSize="TextChanges"
+                        HeightRequest="120"
+                        Text="{Binding Notes}" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Save -->
+            <Button
+                Text="Запази напомнянето"
+                HeightRequest="54"
+                CornerRadius="18"
+                FontSize="16"
+                FontAttributes="Bold"
+                BackgroundColor="#F59E0B"
+                TextColor="White"
+                Command="{Binding SaveReminderCommand}" />
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+</ContentPage>

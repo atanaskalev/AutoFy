@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoFy.Mobile.Views.HomeView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="#F3F4F6">
+
+    <Grid RowDefinitions="Auto,*" Padding="18">
+
+        <!-- Top bar -->
+        <Grid ColumnDefinitions="48,*,48" HeightRequest="56">
+
+            <Border
+                StrokeThickness="0"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 18">
+
+                <Button
+                    Text="ℹ"
+                    FontSize="22"
+                    TextColor="#111827"
+                    BackgroundColor="Transparent"
+                    Command="{Binding OpenAboutCommand}" />
+            </Border>
+
+            <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center">
+                <Label
+                    Text="AutoFy"
+                    FontSize="28"
+                    FontAttributes="Bold"
+                    TextColor="#111827"
+                    HorizontalTextAlignment="Center" />
+
+                <Label
+                    Text="Твоят автомобилен дневник"
+                    FontSize="12"
+                    TextColor="#6B7280"
+                    HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <Border
+                Grid.Column="2"
+                StrokeThickness="0"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 18">
+
+                <Button
+                    Text="☰"
+                    FontSize="24"
+                    TextColor="#111827"
+                    BackgroundColor="Transparent"
+                    Command="{Binding OpenMenuCommand}" />
+            </Border>
+        </Grid>
+
+        <!-- Main content -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="18" Padding="0,20,0,90">
+
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label
+                        Text="Моите автомобили"
+                        FontSize="24"
+                        FontAttributes="Bold"
+                        TextColor="#111827"
+                        VerticalOptions="Center" />
+
+                    <Label
+                        Grid.Column="1"
+                        Text="2 коли"
+                        FontSize="14"
+                        TextColor="#6B7280"
+                        VerticalOptions="Center" />
+                </Grid>
+
+                <!-- Vehicle card 1 -->
+                <Border
+                    StrokeThickness="0"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 24"
+                    Padding="14">
+
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenVehicleDetailsCommand}" />
+                    </Border.GestureRecognizers>
+
+                    <Grid ColumnDefinitions="96,*" ColumnSpacing="14">
+
+                        <Border
+                            WidthRequest="88"
+                            HeightRequest="88"
+                            BackgroundColor="#E5E7EB"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 20">
+
+                            <Label
+                                Text="🚗"
+                                FontSize="42"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+
+                            <Label
+                                Text="BMW 320d"
+                                FontSize="20"
+                                FontAttributes="Bold"
+                                TextColor="#111827" />
+
+                            <Label
+                                Text="2014 • Дизел • 245 000 км"
+                                FontSize="14"
+                                TextColor="#6B7280" />
+
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                <Label Text="Преглед:" FontSize="13" TextColor="#6B7280" />
+                                <Label Grid.Column="1" Text="12.08.2026" FontSize="13" TextColor="#111827" />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                <Label Text="Винетка:" FontSize="13" TextColor="#6B7280" />
+                                <Label Grid.Column="1" Text="Активна" FontSize="13" TextColor="#16A34A" />
+                            </Grid>
+
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- Vehicle card 2 -->
+                <Border
+                    StrokeThickness="0"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 24"
+                    Padding="14">
+
+                    <Grid ColumnDefinitions="96,*" ColumnSpacing="14">
+
+                        <Border
+                            WidthRequest="88"
+                            HeightRequest="88"
+                            BackgroundColor="#E5E7EB"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 20">
+
+                            <Label
+                                Text="🚙"
+                                FontSize="42"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+
+                            <Label
+                                Text="Audi A4"
+                                FontSize="20"
+                                FontAttributes="Bold"
+                                TextColor="#111827" />
+
+                            <Label
+                                Text="2017 • Бензин • 168 000 км"
+                                FontSize="14"
+                                TextColor="#6B7280" />
+
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                <Label Text="Гражданска:" FontSize="13" TextColor="#6B7280" />
+                                <Label Grid.Column="1" Text="05.05.2026" FontSize="13" TextColor="#DC2626" />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                <Label Text="Среден разход:" FontSize="13" TextColor="#6B7280" />
+                                <Label Grid.Column="1" Text="7.4 л/100км" FontSize="13" TextColor="#111827" />
+                            </Grid>
+
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Floating Add Button -->
+        <Border
+            Grid.Row="1"
+            WidthRequest="64"
+            HeightRequest="64"
+            Margin="0,0,8,18"
+            BackgroundColor="#2563EB"
+            StrokeThickness="0"
+            StrokeShape="RoundRectangle 32"
+            HorizontalOptions="End"
+            VerticalOptions="End">
+
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding OpenAddVehicleCommand}" />
+            </Border.GestureRecognizers>
+
+            <Label
+                Text="+"
+                FontSize="38"
+                FontAttributes="Bold"
+                TextColor="White"
+                HorizontalOptions="Center"
+                VerticalOptions="Center" />
+        </Border>
+
+    </Grid>
+</ContentPage>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoFy.Mobile.Views.AboutView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="За приложението"
+    BackgroundColor="#F3F4F6">
+
+    <ScrollView>
+
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="18">
+
+            <!-- Header -->
+            <Border
+                BackgroundColor="#111827"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 28"
+                Padding="28">
+
+                <VerticalStackLayout
+                    Spacing="14"
+                    HorizontalOptions="Center">
+
+                    <Image
+                        Source="logo.png"
+                        HeightRequest="120"
+                        WidthRequest="120"
+                        Aspect="AspectFit" />
+
+                    <Label
+                        Text="AutoFy"
+                        FontSize="36"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="Твоят автомобилен дневник"
+                        FontSize="16"
+                        TextColor="#D1D5DB"
+                        HorizontalTextAlignment="Center" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Description -->
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 24"
+                Padding="18">
+
+                <VerticalStackLayout Spacing="12">
+
+                    <Label
+                        Text="За AutoFy"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        TextColor="#111827" />
+
+                    <Label
+                        Text="AutoFy е мобилно приложение, създадено с цел да улесни управлението и проследяването на всички важни аспекти, свързани с поддръжката на автомобила."
+                        FontSize="15"
+                        TextColor="#374151"
+                        LineBreakMode="WordWrap" />
+
+                    <Label
+                        Text="Приложението позволява на потребителите да следят разходите си за гориво, извършените сервизни дейности, техническите прегледи, винетките, застраховките и други важни събития, свързани с техните автомобили."
+                        FontSize="15"
+                        TextColor="#374151"
+                        LineBreakMode="WordWrap" />
+
+                    <Label
+                        Text="Основната идея на AutoFy е да предостави лесен и удобен начин за организиране на автомобилната информация на едно място, като по този начин помага на потребителите да поддържат своите автомобили по-ефективно и организирано."
+                        FontSize="15"
+                        TextColor="#374151"
+                        LineBreakMode="WordWrap" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Features -->
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 24"
+                Padding="18">
+
+                <VerticalStackLayout Spacing="14">
+
+                    <Label
+                        Text="Основни функционалности"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        TextColor="#111827" />
+
+                    <VerticalStackLayout Spacing="10">
+
+                        <Label
+                            Text="• Добавяне и управление на автомобили"
+                            FontSize="15"
+                            TextColor="#374151" />
+
+                        <Label
+                            Text="• Проследяване на зареждания и разход на гориво"
+                            FontSize="15"
+                            TextColor="#374151" />
+
+                        <Label
+                            Text="• История на сервизни дейности"
+                            FontSize="15"
+                            TextColor="#374151" />
+
+                        <Label
+                            Text="• Напомняния за важни срокове"
+                            FontSize="15"
+                            TextColor="#374151" />
+
+                        <Label
+                            Text="• Проследяване на разходите по автомобила"
+                            FontSize="15"
+                            TextColor="#374151" />
+
+                        <Label
+                            Text="• Статистика и обобщена информация"
+                            FontSize="15"
+                            TextColor="#374151" />
+
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Version -->
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 24"
+                Padding="18">
+
+                <VerticalStackLayout Spacing="8">
+
+                    <Label
+                        Text="Информация"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        TextColor="#111827" />
+
+                    <Grid ColumnDefinitions="*,Auto">
+
+                        <Label
+                            Text="Версия"
+                            FontSize="15"
+                            TextColor="#6B7280" />
+
+                        <Label
+                            Grid.Column="1"
+                            Text="{Binding AppVersion}"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="#111827" />
+
+                    </Grid>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+</ContentPage>

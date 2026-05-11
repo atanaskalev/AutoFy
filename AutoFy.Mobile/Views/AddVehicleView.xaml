@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoFy.Mobile.Views.AddVehicleView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Добави автомобил"
+    BackgroundColor="#F3F4F6">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="18">
+
+            <!-- Header -->
+            <VerticalStackLayout Spacing="4">
+                <Label
+                    Text="Добави автомобил"
+                    FontSize="30"
+                    FontAttributes="Bold"
+                    TextColor="#111827" />
+
+                <Label
+                    Text="Въведи основната информация за автомобила."
+                    FontSize="14"
+                    TextColor="#6B7280" />
+            </VerticalStackLayout>
+
+            <!-- Image placeholder -->
+            <Border
+                HeightRequest="150"
+                BackgroundColor="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 24"
+                Padding="16">
+
+                <VerticalStackLayout
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Spacing="8">
+
+                    <Label
+                        Text="🚗"
+                        FontSize="48"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="Добави снимка"
+                        FontSize="15"
+                        FontAttributes="Bold"
+                        TextColor="#2563EB"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="по избор"
+                        FontSize="12"
+                        TextColor="#9CA3AF"
+                        HorizontalTextAlignment="Center" />
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Main info -->
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 24"
+                Padding="16">
+
+                <VerticalStackLayout Spacing="14">
+
+                    <Label
+                        Text="Основна информация"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="#111827" />
+
+                    <Entry
+                        Placeholder="Марка"
+                        Text="{Binding Brand}" />
+
+                    <Entry
+                        Placeholder="Модел"
+                        Text="{Binding Model}" />
+
+                    <Entry
+                        Placeholder="Година"
+                        Keyboard="Numeric"
+                        Text="{Binding Year}" />
+
+                    <Entry
+                        Placeholder="Регистрационен номер"
+                        Text="{Binding LicensePlate}" />
+
+                    <Entry
+                        Placeholder="VIN номер"
+                        Text="{Binding Vin}" />
+
+                    <Entry
+                        Placeholder="Пробег"
+                        Keyboard="Numeric"
+                        Text="{Binding Mileage}" />
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Technical info -->
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 24"
+                Padding="16">
+
+                <VerticalStackLayout Spacing="14">
+
+                    <Label
+                        Text="Техническа информация"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="#111827" />
+
+                    <Picker
+                        Title="Тип гориво"
+                        SelectedItem="{Binding FuelType}">
+                        <Picker.Items>
+                            <x:String>Бензин</x:String>
+                            <x:String>Дизел</x:String>
+                            <x:String>Газ</x:String>
+                            <x:String>Хибрид</x:String>
+                            <x:String>Електрически</x:String>
+                        </Picker.Items>
+                    </Picker>
+
+                    <Picker
+                        Title="Скоростна кутия"
+                        SelectedItem="{Binding TransmissionType}">
+                        <Picker.Items>
+                            <x:String>Ръчна</x:String>
+                            <x:String>Автоматична</x:String>
+                        </Picker.Items>
+                    </Picker>
+
+                    <Entry
+                        Placeholder="Обем на двигателя"
+                        Text="{Binding EngineSize}" />
+
+                    <Entry
+                        Placeholder="Мощност"
+                        Keyboard="Numeric"
+                        Text="{Binding HorsePower}" />
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Important dates -->
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 24"
+                Padding="16">
+
+                <VerticalStackLayout Spacing="14">
+
+                    <Label
+                        Text="Важни дати"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="#111827" />
+
+                    <Label Text="Технически преглед" FontSize="13" TextColor="#6B7280" />
+                    <DatePicker Date="{Binding TechnicalInspectionDate}" />
+
+                    <Label Text="Гражданска отговорност" FontSize="13" TextColor="#6B7280" />
+                    <DatePicker Date="{Binding InsuranceDate}" />
+
+                    <Label Text="Винетка" FontSize="13" TextColor="#6B7280" />
+                    <DatePicker Date="{Binding VignetteDate}" />
+
+                    <Label Text="Пожарогасител" FontSize="13" TextColor="#6B7280" />
+                    <DatePicker Date="{Binding FireExtinguisherDate}" />
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Save button -->
+            <Button
+                Text="Запази автомобила"
+                HeightRequest="54"
+                CornerRadius="18"
+                FontSize="16"
+                FontAttributes="Bold"
+                BackgroundColor="#2563EB"
+                TextColor="White"
+                Command="{Binding SaveVehicleCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

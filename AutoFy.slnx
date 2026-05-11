@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="AutoFy.Core/AutoFy.Core.csproj" Id="bd5db54b-b359-43a4-aadf-f7213e9a8b8e" />
+  <Project Path="AutoFy.Data/AutoFy.Data.csproj" Id="ef8ca89a-f4b5-4730-b9ac-7a5508ca775d" />
+  <Project Path="AutoFy.Mobile/AutoFy.Mobile.csproj" />
+  <Project Path="AutoFy.Services/AutoFy.Services.csproj" Id="64caf298-c2b5-4bc3-9893-f11d1dc9ebf4" />
+  <Project Path="AutoFy.Tests/AutoFy.Tests.csproj" Id="b630b98c-1dfd-4e50-ac5e-3568c577ace2" />
+</Solution>

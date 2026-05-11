@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoFy.Mobile.Views.VehicleDetailsView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Детайли"
+    BackgroundColor="#F3F4F6">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="18">
+
+            <!-- Header -->
+            <Border
+                BackgroundColor="#111827"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 28"
+                Padding="18">
+
+                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+
+                    <Label
+                        Text="{Binding VehicleName}" 
+                        FontSize="28"
+                        FontAttributes="Bold"
+                        TextColor="White" />
+
+                    <Label
+                        Grid.Row="1"
+                        Text="{Binding VehicleShortInfo}"
+                        FontSize="14"
+                        TextColor="#D1D5DB" />
+
+                    <Label
+                        Grid.Row="2"
+                        Text="{Binding LicensePlate}"
+                        FontSize="14"
+                        TextColor="#9CA3AF"
+                        Margin="0,6,0,0" />
+
+                    <Border
+                        Grid.Column="1"
+                        Grid.RowSpan="3"
+                        WidthRequest="78"
+                        HeightRequest="78"
+                        BackgroundColor="#374151"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 22"
+                        VerticalOptions="Center">
+
+                        <Label
+                            Text="🚗"
+                            FontSize="42"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center" />
+                    </Border>
+
+                </Grid>
+            </Border>
+
+            <!-- Quick stats -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+
+                <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 22" Padding="14">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Среден разход" FontSize="13" TextColor="#6B7280" />
+                        <Label Text="{Binding AverageFuelConsumption}" FontSize="22" FontAttributes="Bold" TextColor="#111827" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="1" BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 22" Padding="14">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Цена на км" FontSize="13" TextColor="#6B7280" />
+                        <Label Text="{Binding CostPerKilometer}" FontSize="22" FontAttributes="Bold" TextColor="#111827" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <!-- Important dates -->
+            <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 24" Padding="16">
+                <VerticalStackLayout Spacing="14">
+
+                    <Label
+                        Text="Важни срокове"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        TextColor="#111827" />
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Технически преглед" TextColor="#374151" />
+                        <Label Grid.Column="1" Text="{Binding TechnicalInspectionDateText}" TextColor="#16A34A" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Гражданска отговорност" TextColor="#374151" />
+                        <Label Grid.Column="1" Text="{Binding InsuranceDateText}" TextColor="#DC2626" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Винетка" TextColor="#374151" />
+                        <Label Grid.Column="1" Text="{Binding VignetteDateText}" TextColor="#16A34A" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Пожарогасител" TextColor="#374151" />
+                        <Label Grid.Column="1" Text="{Binding FireExtinguisherDateText}" TextColor="#F59E0B" />
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Fuel section -->
+            <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 24" Padding="16">
+                <VerticalStackLayout Spacing="14">
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label
+                            Text="Гориво"
+                            FontSize="20"
+                            FontAttributes="Bold"
+                            TextColor="#111827" />
+
+                        <Label
+                            Grid.Column="1"
+                            Text="{Binding LastFuelEntryText}"
+                            FontSize="13"
+                            TextColor="#6B7280"
+                            VerticalOptions="Center" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <VerticalStackLayout>
+                            <Label Text="Общо заредено" FontSize="13" TextColor="#6B7280" />
+                            <Label Text="{Binding TotalFuelLiters}" FontSize="18" FontAttributes="Bold" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1">
+                            <Label Text="Общо разходи" FontSize="13" TextColor="#6B7280" />
+                            <Label Text="{Binding TotalFuelCost}" FontSize="18" FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <Button
+                            Text="Добави зареждане"
+                            CornerRadius="16"
+                            HeightRequest="48"
+                            BackgroundColor="#2563EB"
+                            TextColor="White"
+                            Command="{Binding OpenAddFuelCommand}" />
+
+                        <Button
+                            Grid.Column="1"
+                            Text="История"
+                            CornerRadius="16"
+                            HeightRequest="48"
+                            BackgroundColor="#E5E7EB"
+                            TextColor="#111827"
+                            Command="{Binding OpenFuelHistoryCommand}" />
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Service section -->
+            <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 24" Padding="16">
+                <VerticalStackLayout Spacing="14">
+
+                    <Label
+                        Text="Сервиз"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        TextColor="#111827" />
+
+                    <Label
+                        Text="{Binding LastServiceRecordText}"
+                        FontSize="14"
+                        TextColor="#6B7280" />
+
+                    <Button
+                        Text="Добави сервизна дейност"
+                        CornerRadius="16"
+                        HeightRequest="48"
+                        BackgroundColor="#111827"
+                        TextColor="White"
+                        Command="{Binding OpenAddServiceRecordCommand}" />
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Reminder section -->
+            <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 24" Padding="16">
+                <VerticalStackLayout Spacing="14">
+
+                    <Label
+                        Text="Напомняния"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        TextColor="#111827" />
+
+                    <Label
+                        Text="Добави персонално напомняне за този автомобил."
+                        FontSize="14"
+                        TextColor="#6B7280" />
+
+                    <Button
+                        Text="Добави напомняне"
+                        CornerRadius="16"
+                        HeightRequest="48"
+                        BackgroundColor="#F59E0B"
+                        TextColor="White"
+                        Command="{Binding OpenAddReminderCommand}" />
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

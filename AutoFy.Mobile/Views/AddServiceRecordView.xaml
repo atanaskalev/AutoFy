@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoFy.Mobile.Views.AddServiceRecordView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Сервизна дейност"
+    BackgroundColor="#F3F4F6">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="18">
+
+            <VerticalStackLayout Spacing="4">
+                <Label
+                    Text="Добави сервизна дейност"
+                    FontSize="30"
+                    FontAttributes="Bold"
+                    TextColor="#111827" />
+
+                <Label
+                    Text="Запиши ремонт, обслужване или друга дейност по автомобила."
+                    FontSize="14"
+                    TextColor="#6B7280" />
+            </VerticalStackLayout>
+
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 24"
+                Padding="16">
+
+                <VerticalStackLayout Spacing="16">
+
+                    <Picker
+                        Title="Автомобил"
+                        SelectedItem="{Binding SelectedVehicle}" />
+
+                    <Picker
+                        Title="Тип дейност"
+                        SelectedItem="{Binding ServiceType}">
+                        <Picker.Items>
+                            <x:String>Обслужване</x:String>
+                            <x:String>Ремонт</x:String>
+                            <x:String>Смяна на гуми</x:String>
+                            <x:String>Диагностика</x:String>
+                            <x:String>Технически преглед</x:String>
+                            <x:String>Друго</x:String>
+                        </Picker.Items>
+                    </Picker>
+
+                    <Entry
+                        Placeholder="Километраж"
+                        Keyboard="Numeric"
+                        Text="{Binding Odometer}" />
+
+                    <Entry
+                        Placeholder="Цена"
+                        Keyboard="Numeric"
+                        Text="{Binding Price}" />
+
+                    <DatePicker
+                        Date="{Binding ServiceDate}" />
+
+                    <Editor
+                        Placeholder="Описание / бележка"
+                        AutoSize="TextChanges"
+                        HeightRequest="120"
+                        Text="{Binding Notes}" />
+
+                </VerticalStackLayout>
+            </Border>
+
+            <Button
+                Text="Запази дейността"
+                HeightRequest="54"
+                CornerRadius="18"
+                FontSize="16"
+                FontAttributes="Bold"
+                BackgroundColor="#111827"
+                TextColor="White"
+                Command="{Binding SaveServiceCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

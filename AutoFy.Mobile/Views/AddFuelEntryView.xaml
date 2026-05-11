@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoFy.Mobile.Views.AddFuelEntryView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Добави зареждане"
+    BackgroundColor="#F3F4F6">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="18">
+
+            <VerticalStackLayout Spacing="4">
+                <Label
+                    Text="Добави зареждане"
+                    FontSize="30"
+                    FontAttributes="Bold"
+                    TextColor="#111827" />
+
+                <Label
+                    Text="{Binding VehicleName}"
+                    FontSize="14"
+                    TextColor="#6B7280" />
+            </VerticalStackLayout>
+
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 24"
+                Padding="16">
+
+                <VerticalStackLayout Spacing="14">
+
+                    <Label
+                        Text="Информация за зареждането"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="#111827" />
+
+                    <Label Text="Дата" FontSize="13" TextColor="#6B7280" />
+                    <DatePicker Date="{Binding FuelDate}" />
+
+                    <Entry
+                        Placeholder="Километраж при зареждане"
+                        Keyboard="Numeric"
+                        Text="{Binding Odometer}" />
+
+                    <Entry
+                        Placeholder="Изминати километри"
+                        Keyboard="Numeric"
+                        Text="{Binding Distance}" />
+
+                    <Entry
+                        Placeholder="Заредени литри"
+                        Keyboard="Numeric"
+                        Text="{Binding Liters}" />
+
+                    <Entry
+                        Placeholder="Цена на литър"
+                        Keyboard="Numeric"
+                        Text="{Binding PricePerLiter}" />
+
+                    <Entry
+                        Placeholder="Обща сума"
+                        Keyboard="Numeric"
+                        Text="{Binding TotalPrice}" />
+
+                    <Editor
+                        Placeholder="Бележка"
+                        AutoSize="TextChanges"
+                        HeightRequest="90"
+                        Text="{Binding Notes}" />
+
+                </VerticalStackLayout>
+            </Border>
+
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 24"
+                Padding="16">
+
+                <VerticalStackLayout Spacing="8">
+
+                    <Label
+                        Text="Предварителна сметка"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="#111827" />
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Разход" TextColor="#6B7280" />
+                        <Label Grid.Column="1" Text="{Binding CalculatedConsumption}" FontAttributes="Bold" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Цена на км" TextColor="#6B7280" />
+                        <Label Grid.Column="1" Text="{Binding CalculatedCostPerKm}" FontAttributes="Bold" />
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <Button
+                Text="Запази зареждането"
+                HeightRequest="54"
+                CornerRadius="18"
+                FontSize="16"
+                FontAttributes="Bold"
+                BackgroundColor="#2563EB"
+                TextColor="White"
+                Command="{Binding SaveFuelCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

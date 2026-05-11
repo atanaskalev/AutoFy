@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoFy.Mobile.Views.CalendarView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:calendar="clr-namespace:Syncfusion.Maui.Calendar;assembly=Syncfusion.Maui.Calendar"
+    Title="Календар"
+    BackgroundColor="#F3F4F6">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Header -->
+        <VerticalStackLayout
+            Padding="20,20,20,10"
+            Spacing="4">
+
+            <Label
+                Text="Календар"
+                FontSize="30"
+                FontAttributes="Bold"
+                TextColor="#111827" />
+
+            <Label
+                Text="Предстоящи събития и напомняния."
+                FontSize="14"
+                TextColor="#6B7280" />
+
+        </VerticalStackLayout>
+
+        <!-- Content -->
+        <ScrollView Grid.Row="1">
+
+            <VerticalStackLayout
+                Padding="20,0,20,20"
+                Spacing="18">
+
+                <!-- Calendar -->
+                <Border
+                    BackgroundColor="White"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 24"
+                    Padding="12">
+
+                    <calendar:SfCalendar
+                        SelectionMode="Single"
+                        SelectedDate="{Binding SelectedDate}"
+                        View="Month" />
+
+                </Border>
+
+                <!-- Selected date -->
+                <Label
+                    Text="{Binding SelectedDateText}"
+                    FontSize="22"
+                    FontAttributes="Bold"
+                    TextColor="#111827" />
+
+                <!-- Events -->
+                <CollectionView
+                    ItemsSource="{Binding CalendarEvents}">
+
+                    <CollectionView.EmptyView>
+
+                        <VerticalStackLayout
+                            Padding="0,40,0,0"
+                            Spacing="12"
+                            HorizontalOptions="Center">
+
+                            <Label
+                                Text="📅"
+                                FontSize="54"
+                                HorizontalTextAlignment="Center" />
+
+                            <Label
+                                Text="Няма събития"
+                                FontSize="20"
+                                FontAttributes="Bold"
+                                TextColor="#111827"
+                                HorizontalTextAlignment="Center" />
+
+                            <Label
+                                Text="За избраната дата няма събития."
+                                FontSize="14"
+                                TextColor="#6B7280"
+                                HorizontalTextAlignment="Center"
+                                MaximumWidthRequest="260" />
+
+                        </VerticalStackLayout>
+
+                    </CollectionView.EmptyView>
+
+                </CollectionView>
+
+            </VerticalStackLayout>
+
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

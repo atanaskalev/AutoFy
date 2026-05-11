@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoFy.Mobile.Views.StatisticsView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Статистика"
+    BackgroundColor="#F3F4F6">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="18">
+
+            <VerticalStackLayout Spacing="4">
+                <Label
+                    Text="Статистика"
+                    FontSize="30"
+                    FontAttributes="Bold"
+                    TextColor="#111827" />
+
+                <Label
+                    Text="Обобщение на разходите и използването на автомобилите."
+                    FontSize="14"
+                    TextColor="#6B7280" />
+            </VerticalStackLayout>
+
+            <Border
+                BackgroundColor="#111827"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 28"
+                Padding="20">
+
+                <VerticalStackLayout Spacing="8">
+                    <Label
+                        Text="Общо разходи"
+                        FontSize="14"
+                        TextColor="#D1D5DB" />
+
+                    <Label
+                        Text="{Binding TotalCost}"
+                        FontSize="34"
+                        FontAttributes="Bold"
+                        TextColor="White" />
+
+                    <Label
+                        Text="Гориво + сервизна поддръжка"
+                        FontSize="13"
+                        TextColor="#9CA3AF" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+
+                <Border
+                    BackgroundColor="White"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 22"
+                    Padding="16">
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Автомобили" FontSize="13" TextColor="#6B7280" />
+                        <Label Text="{Binding TotalVehicles}" FontSize="26" FontAttributes="Bold" TextColor="#111827" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border
+                    Grid.Column="1"
+                    BackgroundColor="White"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 22"
+                    Padding="16">
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Среден разход" FontSize="13" TextColor="#6B7280" />
+                        <Label Text="{Binding AverageFuelConsumption}" FontSize="20" FontAttributes="Bold" TextColor="#111827" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+
+                <Border
+                    BackgroundColor="White"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 22"
+                    Padding="16">
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Гориво" FontSize="13" TextColor="#6B7280" />
+                        <Label Text="{Binding TotalFuelCost}" FontSize="22" FontAttributes="Bold" TextColor="#111827" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border
+                    Grid.Column="1"
+                    BackgroundColor="White"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 22"
+                    Padding="16">
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Сервиз" FontSize="13" TextColor="#6B7280" />
+                        <Label Text="{Binding TotalServiceCost}" FontSize="22" FontAttributes="Bold" TextColor="#111827" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 24"
+                Padding="16">
+
+                <VerticalStackLayout Spacing="14">
+
+                    <Label
+                        Text="Допълнителни показатели"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        TextColor="#111827" />
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Цена на километър" TextColor="#6B7280" />
+                        <Label Grid.Column="1" Text="{Binding CostPerKilometer}" FontAttributes="Bold" TextColor="#111827" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Най-скъп автомобил" TextColor="#6B7280" />
+                        <Label Grid.Column="1" Text="{Binding MostExpensiveVehicle}" FontAttributes="Bold" TextColor="#111827" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Последна активност" TextColor="#6B7280" />
+                        <Label Grid.Column="1" Text="{Binding LastActivity}" FontAttributes="Bold" TextColor="#111827" />
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

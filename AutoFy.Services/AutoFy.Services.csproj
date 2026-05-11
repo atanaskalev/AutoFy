@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutoFy.Core\AutoFy.Core.csproj" />
+    <ProjectReference Include="..\AutoFy.Data\AutoFy.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Fuel\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Statistics\" />
+    <Folder Include="Reminder\" />
+    <Folder Include="Vehicle\" />
+  </ItemGroup>
+
+</Project>
