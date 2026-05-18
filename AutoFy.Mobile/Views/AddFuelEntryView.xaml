@@ -62,7 +62,8 @@
                     <Entry
                         Placeholder="Обща сума"
                         Keyboard="Numeric"
-                        Text="{Binding TotalPrice}" />
+                        Text="{Binding TotalPrice}"
+                        IsReadOnly="True" />
 
                     <Editor
                         Placeholder="Бележка"

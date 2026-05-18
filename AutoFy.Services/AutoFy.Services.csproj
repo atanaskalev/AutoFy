@@ -11,12 +11,4 @@
     <ProjectReference Include="..\AutoFy.Data\AutoFy.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Fuel\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Statistics\" />
-    <Folder Include="Reminder\" />
-    <Folder Include="Vehicle\" />
-  </ItemGroup>
-
 </Project>

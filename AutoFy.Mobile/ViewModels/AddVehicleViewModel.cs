@@ -1,17 +1,26 @@
-﻿using System.Windows.Input;
+﻿using AutoFy.Core.Enums;
+using AutoFy.Services.DTOs;
+using AutoFy.Services.Interfaces;
+using CommunityToolkit.Mvvm.Messaging;
+using System.Windows.Input;
 
 namespace AutoFy.Mobile.ViewModels;
 
-public class AddVehicleViewModel : BaseViewModel
+public class AddVehicleViewModel : BaseViewModel, IQueryAttributable
 {
+    private readonly IVehicleService vehicleService;
+
+    private int? vehicleId;
+    private string? imagePath;
+
     private string _brand = string.Empty;
     private string _model = string.Empty;
     private string _year = string.Empty;
     private string _licensePlate = string.Empty;
     private string _vin = string.Empty;
     private string _mileage = string.Empty;
-    private string _fuelType = string.Empty;
-    private string _transmissionType = string.Empty;
+    private string _selectedFuelType = string.Empty;
+    private string _selectedTransmissionType = string.Empty;
     private string _engineSize = string.Empty;
     private string _horsePower = string.Empty;
 
@@ -56,16 +65,16 @@ public class AddVehicleViewModel : BaseViewModel
         set => SetProperty(ref _mileage, value);
     }
 
-    public string FuelType
+    public string SelectedFuelType
     {
-        get => _fuelType;
-        set => SetProperty(ref _fuelType, value);
+        get => _selectedFuelType;
+        set => SetProperty(ref _selectedFuelType, value);
     }
 
-    public string TransmissionType
+    public string SelectedTransmissionType
     {
-        get => _transmissionType;
-        set => SetProperty(ref _transmissionType, value);
+        get => _selectedTransmissionType;
+        set => SetProperty(ref _selectedTransmissionType, value);
     }
 
     public string EngineSize
@@ -78,6 +87,18 @@ public class AddVehicleViewModel : BaseViewModel
     {
         get => _horsePower;
         set => SetProperty(ref _horsePower, value);
+    }
+
+    public string? ImagePath
+    {
+        get => imagePath;
+        set
+        {
+            if (SetProperty(ref imagePath, value))
+            {
+                OnPropertyChanged(nameof(HasImage));
+            }
+        }
     }
 
     public DateTime TechnicalInspectionDate
@@ -103,15 +124,185 @@ public class AddVehicleViewModel : BaseViewModel
         get => _fireExtinguisherDate;
         set => SetProperty(ref _fireExtinguisherDate, value);
     }
-    public ICommand SaveVehicleCommand { get; }
 
-    public AddVehicleViewModel()
+    public bool HasImage => !string.IsNullOrWhiteSpace(ImagePath);
+
+    public string SaveButtonText => vehicleId.HasValue
+        ? "Запази промените"
+        : "Добави автомобил";
+
+    public ICommand SaveVehicleCommand { get; }
+    public ICommand PickImageCommand { get; }
+    public ICommand RemoveImageCommand { get; }
+
+    public AddVehicleViewModel(IVehicleService vehicleService)
     {
+        this.vehicleService = vehicleService;
+
         Title = "Добави автомобил";
 
-        SaveVehicleCommand = new Command(async () =>
+        SaveVehicleCommand = new Command(async () => await SaveVehicleAsync());
+        PickImageCommand = new Command(async () => await PickImageAsync());
+        RemoveImageCommand = new Command(RemoveImage);
+    }
+
+    public async void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (!query.TryGetValue("VehicleId", out var vehicleIdValue))
+            return;
+
+        if (!int.TryParse(vehicleIdValue?.ToString(), out var id))
+            return;
+
+        vehicleId = id;
+        Title = "Редактирай автомобил";
+        OnPropertyChanged(nameof(SaveButtonText));
+
+        await LoadVehicleAsync(id);
+    }
+
+    private async Task LoadVehicleAsync(int id)
+    {
+        var vehicle = await vehicleService.GetByIdAsync(id);
+
+        if (vehicle == null)
+            return;
+
+        Brand = vehicle.Brand;
+        Model = vehicle.Model;
+        Year = vehicle.Year.ToString();
+        LicensePlate = vehicle.LicensePlate;
+        Vin = vehicle.Vin;
+        Mileage = vehicle.Mileage.ToString();
+        SelectedFuelType = MapFuelTypeToText(vehicle.FuelType);
+        SelectedTransmissionType = MapTransmissionTypeToText(vehicle.TransmissionType);
+        EngineSize = vehicle.EngineSize;
+        HorsePower = vehicle.HorsePower.ToString();
+        ImagePath = vehicle.ImagePath;
+
+        TechnicalInspectionDate = vehicle.TechnicalInspectionDate ?? DateTime.Today;
+        InsuranceDate = vehicle.InsuranceDate ?? DateTime.Today;
+        VignetteDate = vehicle.VignetteDate ?? DateTime.Today;
+        FireExtinguisherDate = vehicle.FireExtinguisherDate ?? DateTime.Today;
+    }
+
+    private async Task SaveVehicleAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Brand) || string.IsNullOrWhiteSpace(Model))
         {
-            await Shell.Current.DisplayAlert("AutoFy", "Автомобилът ще бъде записан по-късно.", "OK");
-        });
+            await Shell.Current.DisplayAlertAsync(
+                "Грешка",
+                "Моля, въведи марка и модел.",
+                "OK");
+
+            return;
+        }
+
+        int.TryParse(Year, out var parsedYear);
+        int.TryParse(Mileage, out var parsedMileage);
+        int.TryParse(HorsePower, out var parsedHorsePower);
+
+        var vehicleDto = new VehicleDto
+        {
+            Id = vehicleId ?? 0,
+            Brand = Brand.Trim(),
+            Model = Model.Trim(),
+            Year = parsedYear,
+            LicensePlate = LicensePlate.Trim(),
+            Vin = Vin.Trim(),
+            Mileage = parsedMileage,
+            FuelType = MapFuelType(SelectedFuelType),
+            TransmissionType = MapTransmissionType(SelectedTransmissionType),
+            EngineSize = EngineSize.Trim(),
+            HorsePower = parsedHorsePower,
+            ImagePath = ImagePath,
+            TechnicalInspectionDate = TechnicalInspectionDate,
+            InsuranceDate = InsuranceDate,
+            VignetteDate = VignetteDate,
+            FireExtinguisherDate = FireExtinguisherDate
+        };
+
+        if (vehicleId.HasValue)
+            await vehicleService.UpdateAsync(vehicleDto);
+        else
+            await vehicleService.AddAsync(vehicleDto);
+
+        await Shell.Current.DisplayAlertAsync(
+            "AutoFy",
+            vehicleId.HasValue
+                ? "Автомобилът е редактиран успешно."
+                : "Автомобилът е добавен успешно.",
+            "OK");
+
+        await Shell.Current.GoToAsync("..");
+    }
+
+    private async Task PickImageAsync()
+    {
+        var photo = await MediaPicker.PickPhotoAsync();
+
+        if (photo == null)
+            return;
+
+        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(photo.FileName)}";
+        var destinationPath = Path.Combine(FileSystem.AppDataDirectory, fileName);
+
+        await using var sourceStream = await photo.OpenReadAsync();
+        await using var destinationStream = File.OpenWrite(destinationPath);
+
+        await sourceStream.CopyToAsync(destinationStream);
+
+        ImagePath = destinationPath;
+    }
+
+    private static FuelType MapFuelType(string value)
+    {
+        return value switch
+        {
+            "Бензин" => FuelType.Petrol,
+            "Дизел" => FuelType.Diesel,
+            "Газ" => FuelType.Gas,
+            "Хибрид" => FuelType.Hybrid,
+            "Електрически" => FuelType.Electric,
+            _ => FuelType.Petrol
+        };
+    }
+
+    private static TransmissionType MapTransmissionType(string value)
+    {
+        return value switch
+        {
+            "Автоматична" => TransmissionType.Automatic,
+            "Ръчна" => TransmissionType.Manual,
+            _ => TransmissionType.Manual
+        };
+    }
+
+    private static string MapFuelTypeToText(FuelType fuelType)
+    {
+        return fuelType switch
+        {
+            FuelType.Petrol => "Бензин",
+            FuelType.Diesel => "Дизел",
+            FuelType.Gas => "Газ",
+            FuelType.Hybrid => "Хибрид",
+            FuelType.Electric => "Електрически",
+            _ => "Бензин"
+        };
+    }
+
+    private static string MapTransmissionTypeToText(TransmissionType transmissionType)
+    {
+        return transmissionType switch
+        {
+            TransmissionType.Automatic => "Автоматична",
+            TransmissionType.Manual => "Ръчна",
+            _ => "Ръчна"
+        };
+    }
+
+    private void RemoveImage()
+    {
+        ImagePath = null;
     }
 }

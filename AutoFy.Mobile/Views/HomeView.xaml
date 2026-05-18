@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="AutoFy.Mobile.Views.HomeView"
+    x:Name="HomePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Shell.NavBarIsVisible="False"
     BackgroundColor="#F3F4F6">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+        EventName="Appearing"
+        BindingContext="{Binding Source={x:Reference HomePage}, Path=BindingContext}"
+        Command="{Binding LoadVehiclesCommand}" />
+    </ContentPage.Behaviors>
 
     <Grid RowDefinitions="Auto,*" Padding="18">
 
@@ -68,115 +77,63 @@
 
                     <Label
                         Grid.Column="1"
-                        Text="2 коли"
+                        Text="{Binding VehiclesCount}"
                         FontSize="14"
                         TextColor="#6B7280"
                         VerticalOptions="Center" />
                 </Grid>
 
-                <!-- Vehicle card 1 -->
-                <Border
-                    StrokeThickness="0"
-                    BackgroundColor="White"
-                    StrokeShape="RoundRectangle 24"
-                    Padding="14">
+                <CollectionView ItemsSource="{Binding Vehicles}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                StrokeThickness="0"
+                                BackgroundColor="White"
+                                StrokeShape="RoundRectangle 24"
+                                Padding="14"
+                                Margin="0,0,0,14">
 
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding OpenVehicleDetailsCommand}" />
-                    </Border.GestureRecognizers>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenVehicleDetailsCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
 
-                    <Grid ColumnDefinitions="96,*" ColumnSpacing="14">
+                                <Grid ColumnDefinitions="96,*" ColumnSpacing="14">
 
-                        <Border
-                            WidthRequest="88"
-                            HeightRequest="88"
-                            BackgroundColor="#E5E7EB"
-                            StrokeThickness="0"
-                            StrokeShape="RoundRectangle 20">
+                                    <Border
+                                        WidthRequest="88"
+                                        HeightRequest="88"
+                                        BackgroundColor="#E5E7EB"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 20">
 
-                            <Label
-                                Text="🚗"
-                                FontSize="42"
-                                HorizontalOptions="Center"
-                                VerticalOptions="Center" />
-                        </Border>
+                                        <Image
+                                            Source="{Binding ImagePath}"
+                                            Aspect="AspectFill"
+                                            WidthRequest="88"
+                                            HeightRequest="88" />
+                                    </Border>
 
-                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                    <VerticalStackLayout Grid.Column="1" Spacing="5">
 
-                            <Label
-                                Text="BMW 320d"
-                                FontSize="20"
-                                FontAttributes="Bold"
-                                TextColor="#111827" />
+                                        <Label
+                                            Text="{Binding DisplayName}"
+                                            FontSize="20"
+                                            FontAttributes="Bold"
+                                            TextColor="#111827" />
 
-                            <Label
-                                Text="2014 • Дизел • 245 000 км"
-                                FontSize="14"
-                                TextColor="#6B7280" />
+                                        <Label
+                                            Text="{Binding ShortInfo}"
+                                            FontSize="14"
+                                            TextColor="#6B7280" />
 
-                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                                <Label Text="Преглед:" FontSize="13" TextColor="#6B7280" />
-                                <Label Grid.Column="1" Text="12.08.2026" FontSize="13" TextColor="#111827" />
-                            </Grid>
-
-                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                                <Label Text="Винетка:" FontSize="13" TextColor="#6B7280" />
-                                <Label Grid.Column="1" Text="Активна" FontSize="13" TextColor="#16A34A" />
-                            </Grid>
-
-                        </VerticalStackLayout>
-                    </Grid>
-                </Border>
-
-                <!-- Vehicle card 2 -->
-                <Border
-                    StrokeThickness="0"
-                    BackgroundColor="White"
-                    StrokeShape="RoundRectangle 24"
-                    Padding="14">
-
-                    <Grid ColumnDefinitions="96,*" ColumnSpacing="14">
-
-                        <Border
-                            WidthRequest="88"
-                            HeightRequest="88"
-                            BackgroundColor="#E5E7EB"
-                            StrokeThickness="0"
-                            StrokeShape="RoundRectangle 20">
-
-                            <Label
-                                Text="🚙"
-                                FontSize="42"
-                                HorizontalOptions="Center"
-                                VerticalOptions="Center" />
-                        </Border>
-
-                        <VerticalStackLayout Grid.Column="1" Spacing="5">
-
-                            <Label
-                                Text="Audi A4"
-                                FontSize="20"
-                                FontAttributes="Bold"
-                                TextColor="#111827" />
-
-                            <Label
-                                Text="2017 • Бензин • 168 000 км"
-                                FontSize="14"
-                                TextColor="#6B7280" />
-
-                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                                <Label Text="Гражданска:" FontSize="13" TextColor="#6B7280" />
-                                <Label Grid.Column="1" Text="05.05.2026" FontSize="13" TextColor="#DC2626" />
-                            </Grid>
-
-                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                                <Label Text="Среден разход:" FontSize="13" TextColor="#6B7280" />
-                                <Label Grid.Column="1" Text="7.4 л/100км" FontSize="13" TextColor="#111827" />
-                            </Grid>
-
-                        </VerticalStackLayout>
-                    </Grid>
-                </Border>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
             </VerticalStackLayout>
         </ScrollView>

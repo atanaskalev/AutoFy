@@ -1,10 +1,18 @@
-﻿using System.Windows.Input;
+﻿using AutoFy.Core.Models;
+using AutoFy.Services.Interfaces;
+using System.Globalization;
+using System.Windows.Input;
 
 namespace AutoFy.Mobile.ViewModels;
 
-public class AddFuelEntryViewModel : BaseViewModel
+public class AddFuelEntryViewModel : BaseViewModel, IQueryAttributable
 {
-    private string _vehicleName = "BMW 320d";
+    private readonly IFuelService fuelService;
+    private readonly IVehicleService vehicleService;
+
+    private int vehicleId;
+
+    private string _vehicleName = string.Empty;
     private DateTime _fuelDate = DateTime.Today;
 
     private string _odometer = string.Empty;
@@ -68,7 +76,11 @@ public class AddFuelEntryViewModel : BaseViewModel
     public string TotalPrice
     {
         get => _totalPrice;
-        set => SetProperty(ref _totalPrice, value);
+        set
+        {
+            if (SetProperty(ref _totalPrice, value))
+                CalculatePreview();
+        }
     }
 
     public string Notes
@@ -91,20 +103,92 @@ public class AddFuelEntryViewModel : BaseViewModel
 
     public ICommand SaveFuelCommand { get; }
 
-    public AddFuelEntryViewModel()
+    public AddFuelEntryViewModel(
+        IFuelService fuelService,
+        IVehicleService vehicleService)
     {
+        this.fuelService = fuelService;
+        this.vehicleService = vehicleService;
+
         Title = "Добави зареждане";
 
-        SaveFuelCommand = new Command(async () =>
+        SaveFuelCommand = new Command(async () => await SaveFuelAsync());
+    }
+
+    public async void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (!query.TryGetValue("VehicleId", out var vehicleIdValue))
+            return;
+
+        if (!int.TryParse(vehicleIdValue?.ToString(), out vehicleId))
+            return;
+
+        var vehicle = await vehicleService.GetByIdAsync(vehicleId);
+
+        if (vehicle != null)
+            VehicleName = vehicle.DisplayName;
+    }
+
+    private async Task SaveFuelAsync()
+    {
+        if (vehicleId <= 0)
         {
-            await Shell.Current.DisplayAlert("AutoFy", "Зареждането ще бъде записано по-късно.", "OK");
-        });
+            await Shell.Current.DisplayAlertAsync("Грешка", "Не е избран автомобил.", "OK");
+            return;
+        }
+
+        if (!int.TryParse(Odometer, out var parsedOdometer))
+        {
+            await Shell.Current.DisplayAlertAsync("Грешка", "Въведи валиден километраж.", "OK");
+            return;
+        }
+
+        if (!int.TryParse(Distance, out var parsedDistance) || parsedDistance <= 0)
+        {
+            await Shell.Current.DisplayAlertAsync("Грешка", "Въведи валидни изминати километри.", "OK");
+            return;
+        }
+
+        if (!TryParseDecimal(Liters, out var parsedLiters) || parsedLiters <= 0)
+        {
+            await Shell.Current.DisplayAlertAsync("Грешка", "Въведи валидни литри.", "OK");
+            return;
+        }
+
+        if (!TryParseDecimal(PricePerLiter, out var parsedPricePerLiter) || parsedPricePerLiter <= 0)
+        {
+            await Shell.Current.DisplayAlertAsync("Грешка", "Въведи валидна цена на литър.", "OK");
+            return;
+        }
+
+        var totalPrice = parsedLiters * parsedPricePerLiter;
+
+        var fuelEntry = new FuelEntry
+        {
+            VehicleId = vehicleId,
+            Date = FuelDate,
+            Odometer = parsedOdometer,
+            Distance = parsedDistance,
+            Liters = parsedLiters,
+            PricePerLiter = parsedPricePerLiter,
+            TotalPrice = totalPrice,
+            Notes = Notes?.Trim()
+        };
+
+        await fuelService.AddFuelEntryAsync(fuelEntry);
+
+        await Shell.Current.DisplayAlertAsync(
+            "AutoFy",
+            "Зареждането е записано успешно.",
+            "OK");
+
+        await Shell.Current.GoToAsync("..");
     }
 
     private void CalculatePreview()
     {
-        if (!decimal.TryParse(Distance, out var distance) || distance <= 0 ||
-            !decimal.TryParse(Liters, out var liters) || liters <= 0)
+        if (!TryParseDecimal(Distance, out var distance) || distance <= 0 ||
+            !TryParseDecimal(Liters, out var liters) || liters <= 0)
         {
             CalculatedConsumption = "-";
             CalculatedCostPerKm = "-";
@@ -114,7 +198,7 @@ public class AddFuelEntryViewModel : BaseViewModel
         var consumption = liters / distance * 100;
         CalculatedConsumption = $"{consumption:F2} л/100 км";
 
-        if (decimal.TryParse(PricePerLiter, out var pricePerLiter) && pricePerLiter > 0)
+        if (TryParseDecimal(PricePerLiter, out var pricePerLiter) && pricePerLiter > 0)
         {
             var total = liters * pricePerLiter;
             var costPerKm = total / distance;
@@ -122,9 +206,25 @@ public class AddFuelEntryViewModel : BaseViewModel
             TotalPrice = $"{total:F2}";
             CalculatedCostPerKm = $"{costPerKm:F2} лв/км";
         }
+        else if (TryParseDecimal(TotalPrice, out var totalPrice) && totalPrice > 0)
+        {
+            var costPerKm = totalPrice / distance;
+            CalculatedCostPerKm = $"{costPerKm:F2} лв/км";
+        }
         else
         {
             CalculatedCostPerKm = "-";
         }
+    }
+
+    private static bool TryParseDecimal(string value, out decimal result)
+    {
+        value = value.Replace(',', '.');
+
+        return decimal.TryParse(
+            value,
+            NumberStyles.Number,
+            CultureInfo.InvariantCulture,
+            out result);
     }
 }

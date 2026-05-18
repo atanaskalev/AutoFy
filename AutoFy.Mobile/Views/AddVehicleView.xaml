@@ -25,31 +25,64 @@
 
             <!-- Image placeholder -->
             <Border
-                HeightRequest="150"
                 BackgroundColor="White"
                 StrokeThickness="0"
                 StrokeShape="RoundRectangle 24"
                 Padding="16">
 
-                <VerticalStackLayout
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    Spacing="8">
+                <VerticalStackLayout Spacing="12">
 
                     <Label
-                        Text="🚗"
-                        FontSize="48"
-                        HorizontalTextAlignment="Center" />
+                        Text="Снимка на автомобила"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        TextColor="#111827" />
 
-                    <Label
-                        Text="Добави снимка"
+                    <Grid HeightRequest="190">
+
+                        <Border
+                            BackgroundColor="#F3F4F6"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 20">
+
+                            <Image
+                                Source="{Binding ImagePath}"
+                                Aspect="AspectFill" />
+                        </Border>
+
+                        <Label
+                            Text="✕"
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            BackgroundColor="#66000000"
+                            Padding="8,2"
+                            HorizontalOptions="End"
+                            VerticalOptions="Start"
+                            Margin="10"
+                            IsVisible="{Binding HasImage}">
+
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding RemoveImageCommand}" />
+                            </Label.GestureRecognizers>
+
+                        </Label>
+
+                    </Grid>
+
+                    <Button
+                        Text="Избери снимка"
                         FontSize="15"
                         FontAttributes="Bold"
-                        TextColor="#2563EB"
-                        HorizontalTextAlignment="Center" />
+                        TextColor="White"
+                        BackgroundColor="#2563EB"
+                        CornerRadius="16"
+                        HeightRequest="48"
+                        Command="{Binding PickImageCommand}" />
 
                     <Label
-                        Text="по избор"
+                        Text="Може да добавиш снимка по избор"
                         FontSize="12"
                         TextColor="#9CA3AF"
                         HorizontalTextAlignment="Center" />
@@ -118,7 +151,7 @@
 
                     <Picker
                         Title="Тип гориво"
-                        SelectedItem="{Binding FuelType}">
+                        SelectedItem="{Binding SelectedFuelType}">
                         <Picker.Items>
                             <x:String>Бензин</x:String>
                             <x:String>Дизел</x:String>
@@ -130,7 +163,7 @@
 
                     <Picker
                         Title="Скоростна кутия"
-                        SelectedItem="{Binding TransmissionType}">
+                        SelectedItem="{Binding SelectedTransmissionType}">
                         <Picker.Items>
                             <x:String>Ръчна</x:String>
                             <x:String>Автоматична</x:String>
@@ -181,7 +214,7 @@
 
             <!-- Save button -->
             <Button
-                Text="Запази автомобила"
+                Text="{Binding SaveButtonText}"
                 HeightRequest="54"
                 CornerRadius="18"
                 FontSize="16"

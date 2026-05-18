@@ -1,12 +1,17 @@
-﻿using System.Collections.ObjectModel;
+﻿using AutoFy.Services.DTOs;
+using AutoFy.Services.Interfaces;
+using System.Collections.ObjectModel;
 
 namespace AutoFy.Mobile.ViewModels;
 
-public class FuelHistoryViewModel : BaseViewModel
+public class FuelHistoryViewModel : BaseViewModel, IQueryAttributable
 {
-    private string _vehicleName = "BMW 320d";
+    private readonly IFuelService fuelService;
+    private readonly IVehicleService vehicleService;
 
-    private ObservableCollection<object> _fuelEntries = [];
+    private int vehicleId;
+
+    private string _vehicleName = string.Empty;
 
     public string VehicleName
     {
@@ -14,14 +19,41 @@ public class FuelHistoryViewModel : BaseViewModel
         set => SetProperty(ref _vehicleName, value);
     }
 
-    public ObservableCollection<object> FuelEntries
+    public ObservableCollection<FuelEntryDto> FuelEntries { get; } = new();
+
+    public FuelHistoryViewModel(
+        IFuelService fuelService,
+        IVehicleService vehicleService)
     {
-        get => _fuelEntries;
-        set => SetProperty(ref _fuelEntries, value);
+        this.fuelService = fuelService;
+        this.vehicleService = vehicleService;
+
+        Title = "История на зареждания";
     }
 
-    public FuelHistoryViewModel()
+    public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        Title = "История на зареждания";
+        if (!query.TryGetValue("VehicleId", out var vehicleIdValue))
+            return;
+
+        if (!int.TryParse(vehicleIdValue?.ToString(), out vehicleId))
+            return;
+
+        await LoadDataAsync();
+    }
+
+    private async Task LoadDataAsync()
+    {
+        var vehicle = await vehicleService.GetByIdAsync(vehicleId);
+
+        if (vehicle != null)
+            VehicleName = vehicle.DisplayName;
+
+        FuelEntries.Clear();
+
+        var entries = await fuelService.GetFuelEntriesByVehicleIdAsync(vehicleId);
+
+        foreach (var entry in entries)
+            FuelEntries.Add(entry);
     }
 }
