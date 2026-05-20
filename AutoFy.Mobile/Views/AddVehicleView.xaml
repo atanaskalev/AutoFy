@@ -200,14 +200,34 @@
                     <Label Text="Технически преглед" FontSize="13" TextColor="#6B7280" />
                     <DatePicker Date="{Binding TechnicalInspectionDate}" />
 
+                    <Entry
+                        Placeholder="Цена технически преглед"
+                        Keyboard="Numeric"
+                        Text="{Binding TechnicalInspectionPrice}" />
+
                     <Label Text="Гражданска отговорност" FontSize="13" TextColor="#6B7280" />
                     <DatePicker Date="{Binding InsuranceDate}" />
 
+                    <Entry
+                        Placeholder="Цена гражданска отговорност"
+                        Keyboard="Numeric"
+                        Text="{Binding InsurancePrice}" />
+                    
                     <Label Text="Винетка" FontSize="13" TextColor="#6B7280" />
                     <DatePicker Date="{Binding VignetteDate}" />
 
+                    <Entry
+                        Placeholder="Цена винетка"
+                        Keyboard="Numeric"
+                        Text="{Binding VignettePrice}" />
+                    
                     <Label Text="Пожарогасител" FontSize="13" TextColor="#6B7280" />
                     <DatePicker Date="{Binding FireExtinguisherDate}" />
+
+                    <Entry
+                        Placeholder="Цена пожарогасител"
+                        Keyboard="Numeric"
+                        Text="{Binding FireExtinguisherPrice}" />
 
                 </VerticalStackLayout>
             </Border>

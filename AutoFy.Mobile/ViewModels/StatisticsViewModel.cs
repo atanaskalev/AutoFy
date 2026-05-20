@@ -1,66 +1,56 @@
-﻿namespace AutoFy.Mobile.ViewModels;
+﻿using AutoFy.Services.DTOs;
+using AutoFy.Services.Interfaces;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+
+namespace AutoFy.Mobile.ViewModels;
 
 public class StatisticsViewModel : BaseViewModel
 {
-    private string _totalVehicles = "2";
-    private string _totalFuelCost = "2 160 лв";
-    private string _totalServiceCost = "1 480 лв";
-    private string _totalCost = "3 640 лв";
-    private string _averageFuelConsumption = "6.4 л/100 км";
-    private string _costPerKilometer = "0.21 лв/км";
-    private string _mostExpensiveVehicle = "BMW 320d";
-    private string _lastActivity = "Смяна на масло";
+    private readonly IStatisticsService statisticsService;
 
-    public string TotalVehicles
+    private string _totalCostText = "0.00 лв";
+
+    public string TotalCostText
     {
-        get => _totalVehicles;
-        set => SetProperty(ref _totalVehicles, value);
+        get => _totalCostText;
+        set => SetProperty(ref _totalCostText, value);
     }
 
-    public string TotalFuelCost
-    {
-        get => _totalFuelCost;
-        set => SetProperty(ref _totalFuelCost, value);
-    }
+    public ObservableCollection<VehicleStatisticsDto> Vehicles { get; } = new();
 
-    public string TotalServiceCost
-    {
-        get => _totalServiceCost;
-        set => SetProperty(ref _totalServiceCost, value);
-    }
+    public ICommand LoadStatisticsCommand { get; }
 
-    public string TotalCost
+    public StatisticsViewModel(IStatisticsService statisticsService)
     {
-        get => _totalCost;
-        set => SetProperty(ref _totalCost, value);
-    }
+        this.statisticsService = statisticsService;
 
-    public string AverageFuelConsumption
-    {
-        get => _averageFuelConsumption;
-        set => SetProperty(ref _averageFuelConsumption, value);
-    }
-
-    public string CostPerKilometer
-    {
-        get => _costPerKilometer;
-        set => SetProperty(ref _costPerKilometer, value);
-    }
-
-    public string MostExpensiveVehicle
-    {
-        get => _mostExpensiveVehicle;
-        set => SetProperty(ref _mostExpensiveVehicle, value);
-    }
-
-    public string LastActivity
-    {
-        get => _lastActivity;
-        set => SetProperty(ref _lastActivity, value);
-    }
-
-    public StatisticsViewModel()
-    {
         Title = "Статистика";
+
+        LoadStatisticsCommand = new Command(async () => await LoadStatisticsAsync());
+    }
+
+    private async Task LoadStatisticsAsync()
+    {
+        if (IsBusy)
+            return;
+
+        try
+        {
+            IsBusy = true;
+
+            Vehicles.Clear();
+
+            var statistics = await statisticsService.GetStatisticsAsync();
+
+            TotalCostText = statistics.TotalCostText;
+
+            foreach (var vehicle in statistics.Vehicles)
+                Vehicles.Add(vehicle);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 }

@@ -54,6 +54,8 @@ public static class MauiProgram
         builder.Services.AddScoped<IFuelService, FuelService>();
         builder.Services.AddScoped<IReminderService, ReminderService>();
         builder.Services.AddScoped<IServiceRecordService, ServiceRecordService>();
+        builder.Services.AddScoped<IHistoryService, HistoryService>();
+        builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 
         // Views
         builder.Services.AddTransient<HomeView>();
@@ -68,6 +70,7 @@ public static class MauiProgram
         builder.Services.AddTransient<FuelHistoryView>();
         builder.Services.AddTransient<AddReminderView>();
         builder.Services.AddTransient<AddServiceRecordView>();
+        builder.Services.AddTransient<ServiceHistoryView>();
 
         // ViewModels
         builder.Services.AddTransient<HomeViewModel>();
@@ -82,6 +85,7 @@ public static class MauiProgram
         builder.Services.AddTransient<FuelHistoryViewModel>();
         builder.Services.AddTransient<AddReminderViewModel>();
         builder.Services.AddTransient<AddServiceRecordViewModel>();
+        builder.Services.AddTransient<ServiceHistoryViewModel>();
 
         var app = builder.Build();
 

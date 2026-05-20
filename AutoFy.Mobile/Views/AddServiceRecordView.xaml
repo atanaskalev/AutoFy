@@ -17,6 +17,11 @@
                     TextColor="#111827" />
 
                 <Label
+                    Text="{Binding VehicleName}"
+                    FontSize="14"
+                    TextColor="#6B7280" />
+                
+                <Label
                     Text="Запиши ремонт, обслужване или друга дейност по автомобила."
                     FontSize="14"
                     TextColor="#6B7280" />
@@ -30,22 +35,18 @@
 
                 <VerticalStackLayout Spacing="16">
 
-                    <Picker
-                        Title="Автомобил"
-                        SelectedItem="{Binding SelectedVehicle}" />
+                    <Entry
+                        Placeholder="Име на сервиз / майстор"
+                        Text="{Binding ServiceName}" />
+
+                    <Entry
+                        Placeholder="Локация"
+                        Text="{Binding ServiceLocation}" />
 
                     <Picker
                         Title="Тип дейност"
-                        SelectedItem="{Binding ServiceType}">
-                        <Picker.Items>
-                            <x:String>Обслужване</x:String>
-                            <x:String>Ремонт</x:String>
-                            <x:String>Смяна на гуми</x:String>
-                            <x:String>Диагностика</x:String>
-                            <x:String>Технически преглед</x:String>
-                            <x:String>Друго</x:String>
-                        </Picker.Items>
-                    </Picker>
+                        ItemsSource="{Binding ServiceTypes}"
+                        SelectedItem="{Binding SelectedServiceType}" />
 
                     <Entry
                         Placeholder="Километраж"

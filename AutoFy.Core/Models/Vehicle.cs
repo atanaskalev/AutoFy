@@ -28,6 +28,14 @@ public class Vehicle : BaseEntity, IVehicle
 
     public string? ImagePath { get; set; }
 
+    public decimal VignettePrice { get; set; }
+
+    public decimal InsurancePrice { get; set; }
+
+    public decimal TechnicalInspectionPrice { get; set; }
+
+    public decimal FireExtinguisherPrice { get; set; }
+
     public DateTime? TechnicalInspectionDate { get; set; }
 
     public DateTime? InsuranceDate { get; set; }

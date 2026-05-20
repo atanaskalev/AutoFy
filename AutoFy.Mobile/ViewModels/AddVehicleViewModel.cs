@@ -23,6 +23,10 @@ public class AddVehicleViewModel : BaseViewModel, IQueryAttributable
     private string _selectedTransmissionType = string.Empty;
     private string _engineSize = string.Empty;
     private string _horsePower = string.Empty;
+    private string _vignettePrice = string.Empty;
+    private string _insurancePrice = string.Empty;
+    private string _technicalInspectionPrice = string.Empty;
+    private string _fireExtinguisherPrice = string.Empty;
 
     private DateTime _technicalInspectionDate = DateTime.Today;
     private DateTime _insuranceDate = DateTime.Today;
@@ -99,6 +103,30 @@ public class AddVehicleViewModel : BaseViewModel, IQueryAttributable
                 OnPropertyChanged(nameof(HasImage));
             }
         }
+    }
+
+    public string VignettePrice
+    {
+        get => _vignettePrice;
+        set => SetProperty(ref _vignettePrice, value);
+    }
+
+    public string InsurancePrice
+    {
+        get => _insurancePrice;
+        set => SetProperty(ref _insurancePrice, value);
+    }
+
+    public string TechnicalInspectionPrice
+    {
+        get => _technicalInspectionPrice;
+        set => SetProperty(ref _technicalInspectionPrice, value);
+    }
+
+    public string FireExtinguisherPrice
+    {
+        get => _fireExtinguisherPrice;
+        set => SetProperty(ref _fireExtinguisherPrice, value);
     }
 
     public DateTime TechnicalInspectionDate
@@ -179,7 +207,10 @@ public class AddVehicleViewModel : BaseViewModel, IQueryAttributable
         EngineSize = vehicle.EngineSize;
         HorsePower = vehicle.HorsePower.ToString();
         ImagePath = vehicle.ImagePath;
-
+        VignettePrice = vehicle.VignettePrice.ToString("F2");
+        InsurancePrice = vehicle.InsurancePrice.ToString("F2");
+        TechnicalInspectionPrice = vehicle.TechnicalInspectionPrice.ToString("F2");
+        FireExtinguisherPrice = vehicle.FireExtinguisherPrice.ToString("F2");
         TechnicalInspectionDate = vehicle.TechnicalInspectionDate ?? DateTime.Today;
         InsuranceDate = vehicle.InsuranceDate ?? DateTime.Today;
         VignetteDate = vehicle.VignetteDate ?? DateTime.Today;
@@ -201,6 +232,10 @@ public class AddVehicleViewModel : BaseViewModel, IQueryAttributable
         int.TryParse(Year, out var parsedYear);
         int.TryParse(Mileage, out var parsedMileage);
         int.TryParse(HorsePower, out var parsedHorsePower);
+        decimal.TryParse(VignettePrice, out var parsedVignettePrice);
+        decimal.TryParse(InsurancePrice, out var parsedInsurancePrice);
+        decimal.TryParse(TechnicalInspectionPrice, out var parsedTechnicalInspectionPrice);
+        decimal.TryParse(FireExtinguisherPrice, out var parsedFireExtinguisherPrice);
 
         var vehicleDto = new VehicleDto
         {
@@ -216,6 +251,10 @@ public class AddVehicleViewModel : BaseViewModel, IQueryAttributable
             EngineSize = EngineSize.Trim(),
             HorsePower = parsedHorsePower,
             ImagePath = ImagePath,
+            VignettePrice = parsedVignettePrice,
+            InsurancePrice = parsedInsurancePrice,
+            TechnicalInspectionPrice = parsedTechnicalInspectionPrice,
+            FireExtinguisherPrice = parsedFireExtinguisherPrice,
             TechnicalInspectionDate = TechnicalInspectionDate,
             InsuranceDate = InsuranceDate,
             VignetteDate = VignetteDate,

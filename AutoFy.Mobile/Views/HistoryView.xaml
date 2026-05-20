@@ -1,72 +1,112 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="AutoFy.Mobile.Views.HistoryView"
+    x:Name="HistoryPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Title="История"
     BackgroundColor="#F3F4F6">
 
-    <Grid>
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+        EventName="Appearing"
+        BindingContext="{Binding Source={x:Reference HistoryPage}, Path=BindingContext}"
+        Command="{Binding InitializeCommand}" />
+    </ContentPage.Behaviors>
+    
+    <Grid RowDefinitions="Auto,*" Padding="20">
 
-        <CollectionView
-            Margin="20"
-            ItemsSource="{Binding HistoryItems}">
+        <VerticalStackLayout Spacing="14">
 
-            <CollectionView.Header>
+            <Label
+                Text="История"
+                FontSize="30"
+                FontAttributes="Bold"
+                TextColor="#111827" />
 
-                <VerticalStackLayout
-                    Spacing="4"
-                    Margin="0,0,0,18">
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 24"
+                Padding="14">
 
-                    <Label
-                        Text="История"
-                        FontSize="30"
-                        FontAttributes="Bold"
-                        TextColor="#111827" />
+                <VerticalStackLayout Spacing="12">
 
-                    <Label
-                        Text="Всички зареждания, ремонти и дейности."
-                        FontSize="14"
-                        TextColor="#6B7280" />
+                    <Picker
+                        Title="Автомобил"
+                        ItemsSource="{Binding Vehicles}"
+                        ItemDisplayBinding="{Binding DisplayName}"
+                        SelectedItem="{Binding SelectedVehicle}" />
+
+                    <Picker
+                        Title="Тип запис"
+                        ItemsSource="{Binding HistoryTypes}"
+                        SelectedItem="{Binding SelectedHistoryType}" />
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <DatePicker
+                            Date="{Binding SelectedDate}"
+                            IsEnabled="{Binding UseDateFilter}" />
+
+                        <HorizontalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
+                            <Label
+                                Text="Дата"
+                                FontSize="13"
+                                TextColor="#6B7280"
+                                VerticalOptions="Center" />
+
+                            <Switch IsToggled="{Binding UseDateFilter}" />
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <Button
+                        Text="Изчисти филтрите"
+                        HeightRequest="44"
+                        CornerRadius="14"
+                        BackgroundColor="#E5E7EB"
+                        TextColor="#111827"
+                        Command="{Binding ClearFiltersCommand}" />
 
                 </VerticalStackLayout>
+            </Border>
 
-            </CollectionView.Header>
+        </VerticalStackLayout>
+
+        <CollectionView
+            Grid.Row="1"
+            Margin="0,18,0,0"
+            ItemsSource="{Binding HistoryItems}">
 
             <CollectionView.EmptyView>
-
                 <VerticalStackLayout
                     Padding="0,80,0,0"
                     Spacing="12"
                     HorizontalOptions="Center">
 
                     <Label
-                        Text="📂"
-                        FontSize="52"
+                        Text="📋"
+                        FontSize="54"
                         HorizontalTextAlignment="Center" />
 
                     <Label
-                        Text="Все още няма история"
-                        FontSize="20"
+                        Text="Няма записи"
+                        FontSize="22"
                         FontAttributes="Bold"
                         TextColor="#111827"
                         HorizontalTextAlignment="Center" />
 
                     <Label
-                        Text="Добавените зареждания и сервизни дейности ще се появят тук."
+                        Text="Историята от зареждания и сервизни дейности ще се появи тук."
                         FontSize="14"
                         TextColor="#6B7280"
                         HorizontalTextAlignment="Center"
-                        MaximumWidthRequest="260" />
-
+                        MaximumWidthRequest="280" />
                 </VerticalStackLayout>
-
             </CollectionView.EmptyView>
 
             <CollectionView.ItemTemplate>
-
                 <DataTemplate>
-
                     <Border
                         Margin="0,0,0,14"
                         Padding="16"
@@ -74,32 +114,10 @@
                         StrokeThickness="0"
                         StrokeShape="RoundRectangle 24">
 
-                        <Grid ColumnDefinitions="60,*">
+                        <VerticalStackLayout Spacing="10">
 
-                            <!-- Icon -->
-                            <Border
-                                WidthRequest="52"
-                                HeightRequest="52"
-                                BackgroundColor="#E5E7EB"
-                                StrokeThickness="0"
-                                StrokeShape="RoundRectangle 18"
-                                VerticalOptions="Start">
-
-                                <Label
-                                    Text="{Binding Icon}"
-                                    FontSize="26"
-                                    HorizontalOptions="Center"
-                                    VerticalOptions="Center" />
-
-                            </Border>
-
-                            <!-- Content -->
-                            <VerticalStackLayout
-                                Grid.Column="1"
-                                Spacing="6">
-
-                                <Grid ColumnDefinitions="*,Auto">
-
+                            <Grid ColumnDefinitions="*,Auto">
+                                <VerticalStackLayout Spacing="2">
                                     <Label
                                         Text="{Binding Title}"
                                         FontSize="18"
@@ -107,34 +125,46 @@
                                         TextColor="#111827" />
 
                                     <Label
-                                        Grid.Column="1"
-                                        Text="{Binding Price}"
-                                        FontSize="16"
-                                        FontAttributes="Bold"
-                                        TextColor="#2563EB" />
-
-                                </Grid>
+                                        Text="{Binding VehicleName}"
+                                        FontSize="13"
+                                        TextColor="#6B7280" />
+                                </VerticalStackLayout>
 
                                 <Label
-                                    Text="{Binding Vehicle}"
-                                    FontSize="14"
-                                    TextColor="#6B7280" />
+                                    Grid.Column="1"
+                                    Text="{Binding AmountText}"
+                                    FontSize="18"
+                                    FontAttributes="Bold"
+                                    TextColor="#2563EB"
+                                    VerticalOptions="Center" />
+                            </Grid>
 
+                            <Grid ColumnDefinitions="Auto,*,Auto">
                                 <Label
-                                    Text="{Binding Date}"
+                                    Text="{Binding Type}"
                                     FontSize="13"
-                                    TextColor="#9CA3AF" />
+                                    FontAttributes="Bold"
+                                    TextColor="#111827" />
 
-                            </VerticalStackLayout>
+                                <Label
+                                    Grid.Column="1"
+                                    Text="{Binding Subtitle}"
+                                    FontSize="13"
+                                    TextColor="#6B7280"
+                                    Margin="10,0,10,0" />
 
-                        </Grid>
+                                <Label
+                                    Grid.Column="2"
+                                    Text="{Binding DateText}"
+                                    FontSize="13"
+                                    TextColor="#6B7280" />
+                            </Grid>
+
+                        </VerticalStackLayout>
 
                     </Border>
-
                 </DataTemplate>
-
             </CollectionView.ItemTemplate>
-
         </CollectionView>
 
     </Grid>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoFy.Mobile.Views.ServiceHistoryView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="История на сервиз"
+    BackgroundColor="#F3F4F6">
+
+    <Grid>
+        <CollectionView
+            Margin="20"
+            ItemsSource="{Binding ServiceRecords}">
+
+            <CollectionView.Header>
+                <VerticalStackLayout Spacing="4" Margin="0,0,0,18">
+                    <Label
+                        Text="История на сервиз"
+                        FontSize="30"
+                        FontAttributes="Bold"
+                        TextColor="#111827" />
+
+                    <Label
+                        Text="{Binding VehicleName}"
+                        FontSize="14"
+                        TextColor="#6B7280" />
+                </VerticalStackLayout>
+            </CollectionView.Header>
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout
+                    Padding="0,80,0,0"
+                    Spacing="12"
+                    HorizontalOptions="Center">
+
+                    <Label
+                        Text="🔧"
+                        FontSize="54"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="Няма сервизни дейности"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        TextColor="#111827"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="Добавените ремонти и обслужвания ще се появят тук."
+                        FontSize="14"
+                        TextColor="#6B7280"
+                        HorizontalTextAlignment="Center"
+                        MaximumWidthRequest="280" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border
+                        Margin="0,0,0,14"
+                        Padding="16"
+                        BackgroundColor="White"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 24">
+
+                        <VerticalStackLayout Spacing="14">
+
+                            <Grid ColumnDefinitions="*,Auto">
+                                <VerticalStackLayout Spacing="2">
+                                    <Label
+                                        Text="{Binding ServiceTypeText}"
+                                        FontSize="18"
+                                        FontAttributes="Bold"
+                                        TextColor="#111827" />
+
+                                    <Label
+                                        Text="{Binding DateText}"
+                                        FontSize="13"
+                                        TextColor="#6B7280" />
+                                </VerticalStackLayout>
+
+                                <Label
+                                    Grid.Column="1"
+                                    Text="{Binding PriceText}"
+                                    FontSize="20"
+                                    FontAttributes="Bold"
+                                    TextColor="#2563EB"
+                                    VerticalOptions="Center" />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                                <Border
+                                    BackgroundColor="#F3F4F6"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 16"
+                                    Padding="10">
+
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label Text="Километраж" FontSize="12" TextColor="#6B7280" />
+                                        <Label Text="{Binding OdometerText}" FontSize="16" FontAttributes="Bold" TextColor="#111827" />
+                                    </VerticalStackLayout>
+                                </Border>
+
+                                <Border
+                                    Grid.Column="1"
+                                    BackgroundColor="#F3F4F6"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 16"
+                                    Padding="10">
+
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label Text="Сервиз" FontSize="12" TextColor="#6B7280" />
+                                        <Label Text="{Binding ServiceName}" FontSize="16" FontAttributes="Bold" TextColor="#111827" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </Grid>
+
+                            <Label
+                                Text="{Binding ServiceLocation}"
+                                FontSize="13"
+                                TextColor="#6B7280"
+                                IsVisible="{Binding HasServiceLocation}" />
+
+                            <Label
+                                Text="{Binding Description}"
+                                FontSize="13"
+                                TextColor="#6B7280"
+                                IsVisible="{Binding HasDescription}" />
+
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

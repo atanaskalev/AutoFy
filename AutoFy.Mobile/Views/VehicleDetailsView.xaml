@@ -99,22 +99,44 @@
                     </Grid>
 
                     <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Технически преглед" TextColor="#374151" />
+                        <Label Grid.Column="1" Text="{Binding TechnicalInspectionPriceText}" TextColor="#111827" />
+                    </Grid>
+                    
+                    <Grid ColumnDefinitions="*,Auto">
                         <Label Text="Гражданска отговорност" TextColor="#374151" />
                         <Label Grid.Column="1" Text="{Binding InsuranceDateText}" TextColor="#DC2626" />
                     </Grid>
 
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Гражданска отговорност" TextColor="#374151" />
+                        <Label Grid.Column="1" Text="{Binding InsurancePriceText}" TextColor="#111827" />
+                    </Grid>
+                    
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Text="Винетка" TextColor="#374151" />
                         <Label Grid.Column="1" Text="{Binding VignetteDateText}" TextColor="#16A34A" />
                     </Grid>
 
                     <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Винетка" TextColor="#374151" />
+                        <Label Grid.Column="1" Text="{Binding VignettePriceText}" TextColor="#111827" />
+                    </Grid>
+                    
+                    <Grid ColumnDefinitions="*,Auto">
                         <Label Text="Пожарогасител" TextColor="#374151" />
                         <Label Grid.Column="1" Text="{Binding FireExtinguisherDateText}" TextColor="#F59E0B" />
                     </Grid>
 
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Пожарогасител" TextColor="#374151" />
+                        <Label Grid.Column="1" Text="{Binding FireExtinguisherPriceText}" TextColor="#111827" />
+                    </Grid>
+                    
                 </VerticalStackLayout>
             </Border>
+            
+            
 
             <!-- Fuel section -->
             <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 24" Padding="16">
@@ -184,13 +206,24 @@
                         FontSize="14"
                         TextColor="#6B7280" />
 
-                    <Button
-                        Text="Добави сервизна дейност"
-                        CornerRadius="16"
-                        HeightRequest="48"
-                        BackgroundColor="#111827"
-                        TextColor="White"
-                        Command="{Binding OpenAddServiceRecordCommand}" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <Button
+                            Text="Добави дейност"
+                            CornerRadius="16"
+                            HeightRequest="48"
+                            BackgroundColor="#111827"
+                            TextColor="White"
+                            Command="{Binding OpenAddServiceRecordCommand}" />
+
+                        <Button
+                            Grid.Column="1"
+                            Text="История"
+                            CornerRadius="16"
+                            HeightRequest="48"
+                            BackgroundColor="#E5E7EB"
+                            TextColor="#111827"
+                            Command="{Binding OpenServiceHistoryCommand}" />
+                    </Grid>
 
                 </VerticalStackLayout>
             </Border>

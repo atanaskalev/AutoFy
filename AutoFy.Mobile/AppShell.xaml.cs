@@ -1,4 +1,6 @@
 ﻿using AutoFy.Mobile.Views;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Core.Platform;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutoFy.Mobile;
@@ -15,6 +17,15 @@ public partial class AppShell : Shell
 
         RegisterRoutes();
         BuildShell();
+        Loaded += OnLoaded;
+    }
+
+    private void OnLoaded(object? sender, EventArgs e)
+    {
+#if ANDROID
+        StatusBar.SetColor(Colors.White);
+        StatusBar.SetStyle(StatusBarStyle.DarkContent);
+#endif
     }
 
     private void RegisterRoutes()
@@ -27,6 +38,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(FuelHistoryView), typeof(FuelHistoryView));
         Routing.RegisterRoute(nameof(AddReminderView), typeof(AddReminderView));
         Routing.RegisterRoute(nameof(AddServiceRecordView), typeof(AddServiceRecordView));
+        Routing.RegisterRoute(nameof(ServiceHistoryView), typeof(ServiceHistoryView));
     }
 
     private void BuildShell()

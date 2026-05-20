@@ -21,6 +21,10 @@ public static class VehicleMapper
             EngineSize = vehicle.EngineSize,
             HorsePower = vehicle.HorsePower,
             ImagePath = vehicle.ImagePath,
+            VignettePrice = vehicle.VignettePrice,
+            InsurancePrice = vehicle.InsurancePrice,
+            TechnicalInspectionPrice = vehicle.TechnicalInspectionPrice,
+            FireExtinguisherPrice = vehicle.FireExtinguisherPrice,
             TechnicalInspectionDate = vehicle.TechnicalInspectionDate,
             InsuranceDate = vehicle.InsuranceDate,
             VignetteDate = vehicle.VignetteDate,
@@ -44,6 +48,10 @@ public static class VehicleMapper
             EngineSize = dto.EngineSize,
             HorsePower = dto.HorsePower,
             ImagePath = dto.ImagePath,
+            VignettePrice = dto.VignettePrice,
+            InsurancePrice = dto.InsurancePrice,
+            TechnicalInspectionPrice = dto.TechnicalInspectionPrice,
+            FireExtinguisherPrice = dto.FireExtinguisherPrice,
             TechnicalInspectionDate = dto.TechnicalInspectionDate,
             InsuranceDate = dto.InsuranceDate,
             VignetteDate = dto.VignetteDate,
@@ -64,6 +72,10 @@ public static class VehicleMapper
         vehicle.EngineSize = dto.EngineSize;
         vehicle.HorsePower = dto.HorsePower;
         vehicle.ImagePath = dto.ImagePath;
+        vehicle.VignettePrice = dto.VignettePrice;
+        vehicle.InsurancePrice = dto.InsurancePrice;
+        vehicle.TechnicalInspectionPrice = dto.TechnicalInspectionPrice;
+        vehicle.FireExtinguisherPrice = dto.FireExtinguisherPrice;
         vehicle.TechnicalInspectionDate = dto.TechnicalInspectionDate;
         vehicle.InsuranceDate = dto.InsuranceDate;
         vehicle.VignetteDate = dto.VignetteDate;
