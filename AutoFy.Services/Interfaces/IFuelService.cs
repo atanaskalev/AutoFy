@@ -7,17 +7,23 @@ public interface IFuelService
 {
     Task AddFuelEntryAsync(FuelEntry fuelEntry);
 
+    Task<FuelEntryDto?> GetByIdAsync(int id);
+
+    Task UpdateFuelEntryAsync(FuelEntryDto fuelEntryDto);
+
+    Task DeleteFuelEntryAsync(int id);
+
     Task<IEnumerable<FuelEntryDto>> GetFuelEntriesByVehicleIdAsync(int vehicleId);
 
-    decimal CalculateConsumption(decimal liters, int distance);
+    Task<decimal> GetAverageConsumptionAsync(int vehicleId);
 
-    decimal CalculateCostPerKilometer(decimal totalPrice, int distance);
+    Task<decimal?> GetLastConsumptionAsync(int vehicleId);
 
     Task<decimal> GetTotalFuelLitersAsync(int vehicleId);
 
     Task<decimal> GetTotalFuelCostAsync(int vehicleId);
 
-    Task<decimal> GetAverageConsumptionAsync(int vehicleId);
+    decimal CalculateConsumption(decimal liters, int distance);
 
-    Task<decimal?> GetLastConsumptionAsync(int vehicleId);
+    decimal CalculateCostPerKilometer(decimal totalPrice, int distance);
 }

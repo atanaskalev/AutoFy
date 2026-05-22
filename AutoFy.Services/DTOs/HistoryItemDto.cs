@@ -18,5 +18,5 @@ public class HistoryItemDto
 
     public string DateText => Date.ToString("dd.MM.yyyy");
 
-    public string AmountText => $"{Amount:F2} лв";
+    public string AmountText => $"{Amount:F2} €";
 }

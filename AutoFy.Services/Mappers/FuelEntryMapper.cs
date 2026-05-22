@@ -22,4 +22,18 @@ public static class FuelEntryMapper
             Notes = fuelEntry.Notes
         };
     }
+
+    public static void UpdateEntity(FuelEntry entity, FuelEntryDto dto)
+    {
+        entity.Date = dto.Date;
+        entity.Odometer = dto.Odometer;
+        entity.Distance = dto.Distance;
+        entity.Liters = dto.Liters;
+        entity.PricePerLiter = dto.PricePerLiter;
+        entity.TotalPrice = dto.TotalPrice;
+        entity.Consumption = dto.Consumption;
+        entity.CostPerKilometer = dto.CostPerKilometer;
+        entity.Notes = dto.Notes;
+        entity.UpdatedAt = DateTime.Now;
+    }
 }

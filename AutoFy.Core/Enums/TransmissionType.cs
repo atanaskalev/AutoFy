@@ -2,6 +2,6 @@
 
 public enum TransmissionType
 {
-    Manual = 1,
-    Automatic = 2
+    Ръчна = 1,
+    Автоматична = 2
 }

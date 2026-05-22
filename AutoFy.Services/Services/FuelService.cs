@@ -97,4 +97,38 @@ public class FuelService : IFuelService
             .Select(x => x.Consumption)
             .FirstOrDefault();
     }
+
+    public async Task<FuelEntryDto?> GetByIdAsync(int id)
+    {
+        var fuelEntry = await fuelEntryRepository.GetByIdAsync(id);
+
+        return fuelEntry == null
+            ? null
+            : FuelEntryMapper.ToDto(fuelEntry);
+    }
+
+    public async Task UpdateFuelEntryAsync(FuelEntryDto fuelEntryDto)
+    {
+        var existingFuelEntry = await fuelEntryRepository.GetByIdAsync(fuelEntryDto.Id);
+
+        if (existingFuelEntry == null)
+            return;
+
+        fuelEntryDto.Consumption = CalculateConsumption(fuelEntryDto.Liters, fuelEntryDto.Distance);
+        fuelEntryDto.CostPerKilometer = CalculateCostPerKilometer(fuelEntryDto.TotalPrice, fuelEntryDto.Distance);
+
+        FuelEntryMapper.UpdateEntity(existingFuelEntry, fuelEntryDto);
+
+        await fuelEntryRepository.UpdateAsync(existingFuelEntry);
+    }
+
+    public async Task DeleteFuelEntryAsync(int id)
+    {
+        var fuelEntry = await fuelEntryRepository.GetByIdAsync(id);
+
+        if (fuelEntry == null)
+            return;
+
+        await fuelEntryRepository.DeleteAsync(fuelEntry);
+    }
 }

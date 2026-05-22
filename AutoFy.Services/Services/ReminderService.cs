@@ -30,4 +30,26 @@ public class ReminderService : IReminderService
 
         await reminderRepository.UpdateAsync(reminder);
     }
+
+    public async Task<Reminder?> GetByIdAsync(int id)
+    {
+        return await reminderRepository.GetByIdAsync(id);
+    }
+
+    public async Task UpdateAsync(Reminder reminder)
+    {
+        reminder.UpdatedAt = DateTime.Now;
+
+        await reminderRepository.UpdateAsync(reminder);
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var reminder = await reminderRepository.GetByIdAsync(id);
+
+        if (reminder == null)
+            return;
+
+        await reminderRepository.DeleteAsync(reminder);
+    }
 }

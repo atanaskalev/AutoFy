@@ -18,7 +18,7 @@
 
                 <Label
                     Text="{Binding VehicleName}"
-                    FontSize="14"
+                    FontSize="20"
                     TextColor="#6B7280" />
                 
                 <Label
@@ -71,7 +71,7 @@
             </Border>
 
             <Button
-                Text="Запази дейността"
+                Text="{Binding SaveButtonText}"
                 HeightRequest="54"
                 CornerRadius="18"
                 FontSize="16"
@@ -79,6 +79,17 @@
                 BackgroundColor="#111827"
                 TextColor="White"
                 Command="{Binding SaveServiceCommand}" />
+
+            <Button
+                Text="Изтрий дейността"
+                HeightRequest="54"
+                CornerRadius="18"
+                FontSize="16"
+                FontAttributes="Bold"
+                BackgroundColor="#DC2626"
+                TextColor="White"
+                IsVisible="{Binding IsEditMode}"
+                Command="{Binding DeleteServiceCommand}" />
 
         </VerticalStackLayout>
     </ScrollView>

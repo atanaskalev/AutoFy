@@ -20,4 +20,16 @@ public static class ServiceRecordMapper
             ServiceLocation = serviceRecord.ServiceLocation
         };
     }
+
+    public static void UpdateEntity(ServiceRecord entity, ServiceRecordDto dto)
+    {
+        entity.ServiceType = dto.ServiceType;
+        entity.Date = dto.Date;
+        entity.Odometer = dto.Odometer;
+        entity.Price = dto.Price;
+        entity.Description = dto.Description;
+        entity.ServiceName = dto.ServiceName;
+        entity.ServiceLocation = dto.ServiceLocation;
+        entity.UpdatedAt = DateTime.Now;
+    }
 }

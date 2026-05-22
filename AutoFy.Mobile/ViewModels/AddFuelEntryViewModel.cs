@@ -1,4 +1,5 @@
 ﻿using AutoFy.Core.Models;
+using AutoFy.Services.DTOs;
 using AutoFy.Services.Interfaces;
 using System.Globalization;
 using System.Windows.Input;
@@ -11,6 +12,7 @@ public class AddFuelEntryViewModel : BaseViewModel, IQueryAttributable
     private readonly IVehicleService vehicleService;
 
     private int vehicleId;
+    private int? fuelEntryId;
 
     private string _vehicleName = string.Empty;
     private DateTime _fuelDate = DateTime.Today;
@@ -76,11 +78,7 @@ public class AddFuelEntryViewModel : BaseViewModel, IQueryAttributable
     public string TotalPrice
     {
         get => _totalPrice;
-        set
-        {
-            if (SetProperty(ref _totalPrice, value))
-                CalculatePreview();
-        }
+        set => SetProperty(ref _totalPrice, value);
     }
 
     public string Notes
@@ -101,7 +99,11 @@ public class AddFuelEntryViewModel : BaseViewModel, IQueryAttributable
         set => SetProperty(ref _calculatedCostPerKm, value);
     }
 
+    public string SaveButtonText =>
+        fuelEntryId.HasValue ? "Запази промените" : "Запази зареждането";
+
     public ICommand SaveFuelCommand { get; }
+    public ICommand DeleteFuelCommand { get; }
 
     public AddFuelEntryViewModel(
         IFuelService fuelService,
@@ -113,20 +115,55 @@ public class AddFuelEntryViewModel : BaseViewModel, IQueryAttributable
         Title = "Добави зареждане";
 
         SaveFuelCommand = new Command(async () => await SaveFuelAsync());
+        DeleteFuelCommand = new Command(async () => await DeleteFuelAsync());
     }
 
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (!query.TryGetValue("VehicleId", out var vehicleIdValue))
+        if (query.TryGetValue("FuelEntryId", out var fuelEntryIdValue) &&
+            int.TryParse(fuelEntryIdValue?.ToString(), out var parsedFuelEntryId))
+        {
+            fuelEntryId = parsedFuelEntryId;
+            Title = "Редактирай зареждане";
+            OnPropertyChanged(nameof(SaveButtonText));
+
+            await LoadFuelEntryAsync(parsedFuelEntryId);
+            return;
+        }
+
+        if (query.TryGetValue("VehicleId", out var vehicleIdValue) &&
+            int.TryParse(vehicleIdValue?.ToString(), out vehicleId))
+        {
+            var vehicle = await vehicleService.GetByIdAsync(vehicleId);
+
+            if (vehicle != null)
+                VehicleName = vehicle.DisplayName;
+        }
+    }
+
+    private async Task LoadFuelEntryAsync(int id)
+    {
+        var fuelEntry = await fuelService.GetByIdAsync(id);
+
+        if (fuelEntry == null)
             return;
 
-        if (!int.TryParse(vehicleIdValue?.ToString(), out vehicleId))
-            return;
+        vehicleId = fuelEntry.VehicleId;
 
         var vehicle = await vehicleService.GetByIdAsync(vehicleId);
 
         if (vehicle != null)
             VehicleName = vehicle.DisplayName;
+
+        FuelDate = fuelEntry.Date;
+        Odometer = fuelEntry.Odometer.ToString();
+        Distance = fuelEntry.Distance.ToString();
+        Liters = fuelEntry.Liters.ToString("F2");
+        PricePerLiter = fuelEntry.PricePerLiter.ToString("F2");
+        TotalPrice = fuelEntry.TotalPrice.ToString("F2");
+        Notes = fuelEntry.Notes ?? string.Empty;
+
+        CalculatePreview();
     }
 
     private async Task SaveFuelAsync()
@@ -163,23 +200,69 @@ public class AddFuelEntryViewModel : BaseViewModel, IQueryAttributable
 
         var totalPrice = parsedLiters * parsedPricePerLiter;
 
-        var fuelEntry = new FuelEntry
+        if (fuelEntryId.HasValue)
         {
-            VehicleId = vehicleId,
-            Date = FuelDate,
-            Odometer = parsedOdometer,
-            Distance = parsedDistance,
-            Liters = parsedLiters,
-            PricePerLiter = parsedPricePerLiter,
-            TotalPrice = totalPrice,
-            Notes = Notes?.Trim()
-        };
+            var fuelEntryDto = new FuelEntryDto
+            {
+                Id = fuelEntryId.Value,
+                VehicleId = vehicleId,
+                Date = FuelDate,
+                Odometer = parsedOdometer,
+                Distance = parsedDistance,
+                Liters = parsedLiters,
+                PricePerLiter = parsedPricePerLiter,
+                TotalPrice = totalPrice,
+                Notes = Notes?.Trim()
+            };
 
-        await fuelService.AddFuelEntryAsync(fuelEntry);
+            await fuelService.UpdateFuelEntryAsync(fuelEntryDto);
+        }
+        else
+        {
+            var fuelEntry = new FuelEntry
+            {
+                VehicleId = vehicleId,
+                Date = FuelDate,
+                Odometer = parsedOdometer,
+                Distance = parsedDistance,
+                Liters = parsedLiters,
+                PricePerLiter = parsedPricePerLiter,
+                TotalPrice = totalPrice,
+                Notes = Notes?.Trim()
+            };
+
+            await fuelService.AddFuelEntryAsync(fuelEntry);
+        }
 
         await Shell.Current.DisplayAlertAsync(
             "AutoFy",
-            "Зареждането е записано успешно.",
+            fuelEntryId.HasValue
+                ? "Зареждането е редактирано успешно."
+                : "Зареждането е записано успешно.",
+            "OK");
+
+        await Shell.Current.GoToAsync("..");
+    }
+
+    private async Task DeleteFuelAsync()
+    {
+        if (!fuelEntryId.HasValue)
+            return;
+
+        var confirmed = await Shell.Current.DisplayAlertAsync(
+            "Изтриване",
+            "Сигурен ли си, че искаш да изтриеш това зареждане?",
+            "Да",
+            "Не");
+
+        if (!confirmed)
+            return;
+
+        await fuelService.DeleteFuelEntryAsync(fuelEntryId.Value);
+
+        await Shell.Current.DisplayAlertAsync(
+            "AutoFy",
+            "Зареждането е изтрито успешно.",
             "OK");
 
         await Shell.Current.GoToAsync("..");
@@ -204,12 +287,7 @@ public class AddFuelEntryViewModel : BaseViewModel, IQueryAttributable
             var costPerKm = total / distance;
 
             TotalPrice = $"{total:F2}";
-            CalculatedCostPerKm = $"{costPerKm:F2} лв/км";
-        }
-        else if (TryParseDecimal(TotalPrice, out var totalPrice) && totalPrice > 0)
-        {
-            var costPerKm = totalPrice / distance;
-            CalculatedCostPerKm = $"{costPerKm:F2} лв/км";
+            CalculatedCostPerKm = $"{costPerKm:F2} €/км";
         }
         else
         {

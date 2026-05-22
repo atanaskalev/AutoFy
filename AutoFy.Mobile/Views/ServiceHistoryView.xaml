@@ -21,7 +21,7 @@
 
                     <Label
                         Text="{Binding VehicleName}"
-                        FontSize="14"
+                        FontSize="20"
                         TextColor="#6B7280" />
                 </VerticalStackLayout>
             </CollectionView.Header>
@@ -62,6 +62,12 @@
                         StrokeThickness="0"
                         StrokeShape="RoundRectangle 24">
 
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenEditServiceRecordCommand}"
+                                CommandParameter="{Binding .}" />
+                        </Border.GestureRecognizers>
+                        
                         <VerticalStackLayout Spacing="14">
 
                             <Grid ColumnDefinitions="*,Auto">

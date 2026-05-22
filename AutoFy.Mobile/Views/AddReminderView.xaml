@@ -7,14 +7,11 @@
     BackgroundColor="#F3F4F6">
 
     <ScrollView>
-
         <VerticalStackLayout
             Padding="20"
             Spacing="18">
 
-            <!-- Header -->
             <VerticalStackLayout Spacing="4">
-
                 <Label
                     Text="Добави напомняне"
                     FontSize="30"
@@ -22,13 +19,11 @@
                     TextColor="#111827" />
 
                 <Label
-                    Text="Създай напомняне за автомобил."
-                    FontSize="14"
+                    Text="{Binding VehicleName}"
+                    FontSize="20"
                     TextColor="#6B7280" />
-
             </VerticalStackLayout>
 
-            <!-- Form -->
             <Border
                 BackgroundColor="White"
                 StrokeThickness="0"
@@ -38,24 +33,9 @@
                 <VerticalStackLayout Spacing="16">
 
                     <Picker
-                        Title="Автомобил"
-                        SelectedItem="{Binding SelectedVehicle}" />
-
-                    <Picker
                         Title="Тип напомняне"
-                        SelectedItem="{Binding ReminderType}">
-
-                        <Picker.Items>
-                            <x:String>Технически преглед</x:String>
-                            <x:String>Гражданска отговорност</x:String>
-                            <x:String>Винетка</x:String>
-                            <x:String>Пожарогасител</x:String>
-                            <x:String>Обслужване</x:String>
-                            <x:String>Сервиз</x:String>
-                            <x:String>Друго</x:String>
-                        </Picker.Items>
-
-                    </Picker>
+                        ItemsSource="{Binding ReminderTypes}"
+                        SelectedItem="{Binding SelectedReminderType}" />
 
                     <DatePicker
                         Date="{Binding ReminderDate}" />
@@ -67,12 +47,10 @@
                         Text="{Binding Notes}" />
 
                 </VerticalStackLayout>
-
             </Border>
 
-            <!-- Save -->
             <Button
-                Text="Запази напомнянето"
+                Text="{Binding SaveButtonText}"
                 HeightRequest="54"
                 CornerRadius="18"
                 FontSize="16"
@@ -81,7 +59,17 @@
                 TextColor="White"
                 Command="{Binding SaveReminderCommand}" />
 
+            <Button
+                Text="Изтрий напомнянето"
+                HeightRequest="54"
+                CornerRadius="18"
+                FontSize="16"
+                FontAttributes="Bold"
+                BackgroundColor="#DC2626"
+                TextColor="White"
+                IsVisible="{Binding IsEditMode}"
+                Command="{Binding DeleteReminderCommand}" />
+            
         </VerticalStackLayout>
-
     </ScrollView>
 </ContentPage>

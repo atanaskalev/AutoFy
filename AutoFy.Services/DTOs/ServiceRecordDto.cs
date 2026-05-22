@@ -26,18 +26,18 @@ public class ServiceRecordDto
 
     public string ServiceTypeText => ServiceType switch
     {
-        ServiceType.Maintenance => "Обслужване",
-        ServiceType.Repair => "Ремонт",
-        ServiceType.TireChange => "Смяна на гуми",
-        ServiceType.Diagnostics => "Диагностика",
-        ServiceType.TechnicalInspection => "Технически преглед",
-        ServiceType.Other => "Друго",
+        ServiceType.Обслужване => "Обслужване",
+        ServiceType.Ремонт => "Ремонт",
+        ServiceType.СмянаНаГуми => "Смяна на гуми",
+        ServiceType.Диагностика => "Диагностика",
+        ServiceType.ТехническиПреглед => "Технически преглед",
+        ServiceType.Друго => "Друго",
         _ => "Друго"
     };
 
     public string OdometerText => $"{Odometer} км";
 
-    public string PriceText => $"{Price:F2} лв";
+    public string PriceText => $"{Price:F2} €";
 
     public bool HasDescription => !string.IsNullOrWhiteSpace(Description);
 

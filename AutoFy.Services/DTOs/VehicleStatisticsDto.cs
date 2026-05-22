@@ -10,7 +10,7 @@ public class VehicleStatisticsDto
 
     public decimal AverageFuelConsumption { get; set; }
 
-    public string TotalCostText => $"{TotalCost:F2} лв";
+    public string TotalCostText => $"{TotalCost:F2} €";
 
     public string AverageFuelConsumptionText =>
         AverageFuelConsumption > 0

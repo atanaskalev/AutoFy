@@ -14,4 +14,10 @@ public interface IServiceRecordService
     Task<ServiceRecord?> GetLastServiceRecordAsync(int vehicleId);
 
     Task<IEnumerable<ServiceRecordDto>> GetServiceRecordsByVehicleIdAsync(int vehicleId);
+
+    Task<ServiceRecordDto?> GetByIdAsync(int id);
+
+    Task UpdateAsync(ServiceRecordDto serviceRecordDto);
+
+    Task DeleteAsync(int id);
 }

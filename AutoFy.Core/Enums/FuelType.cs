@@ -2,9 +2,9 @@
 
 public enum FuelType
 {
-    Petrol = 1,
-    Diesel = 2,
-    Gas = 3,
-    Hybrid = 4,
-    Electric = 5
+    Бензин = 1,
+    Дизел = 2,
+    Газ = 3,
+    Хибрид = 4,
+    Електрически = 5
 }

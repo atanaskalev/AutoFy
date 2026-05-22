@@ -96,12 +96,6 @@
 	  <Compile Update="Views\HomeView.xaml.cs">
 	    <DependentUpon>HomeView.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\ProfileView.xaml.cs">
-	    <DependentUpon>ProfileView.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\SettingsView.xaml.cs">
-	    <DependentUpon>SettingsView.xaml</DependentUpon>
-	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -132,13 +126,7 @@
 	  <MauiXaml Update="Views\HomeView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ProfileView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Views\ServiceHistoryView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\SettingsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\StatisticsView.xaml">

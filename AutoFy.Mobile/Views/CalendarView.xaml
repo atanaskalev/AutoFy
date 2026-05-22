@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="AutoFy.Mobile.Views.CalendarView"
+    x:Name="CalendarPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:calendar="clr-namespace:Syncfusion.Maui.Calendar;assembly=Syncfusion.Maui.Calendar"
     Title="Календар"
     BackgroundColor="#F3F4F6">
 
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            BindingContext="{Binding Source={x:Reference CalendarPage}, Path=BindingContext}"
+            Command="{Binding LoadEventsCommand}" />
+    </ContentPage.Behaviors>
+
     <Grid RowDefinitions="Auto,*">
 
-        <!-- Header -->
-        <VerticalStackLayout
-            Padding="20,20,20,10"
-            Spacing="4">
-
+        <VerticalStackLayout Padding="20,20,20,10" Spacing="4">
             <Label
                 Text="Календар"
                 FontSize="30"
@@ -21,20 +26,14 @@
                 TextColor="#111827" />
 
             <Label
-                Text="Предстоящи събития и напомняния."
+                Text="Предстоящи напомняния и важни дати."
                 FontSize="14"
                 TextColor="#6B7280" />
-
         </VerticalStackLayout>
 
-        <!-- Content -->
         <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20,0,20,20" Spacing="18">
 
-            <VerticalStackLayout
-                Padding="20,0,20,20"
-                Spacing="18">
-
-                <!-- Calendar -->
                 <Border
                     BackgroundColor="White"
                     StrokeThickness="0"
@@ -45,22 +44,41 @@
                         SelectionMode="Single"
                         SelectedDate="{Binding SelectedDate}"
                         View="Month" />
-
                 </Border>
 
-                <!-- Selected date -->
+                <FlexLayout
+                    BindableLayout.ItemsSource="{Binding EventDateTexts}"
+                    Direction="Row"
+                    Wrap="Wrap"
+                    JustifyContent="Start">
+
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                Margin="0,0,8,8"
+                                Padding="12,6"
+                                BackgroundColor="#F59E0B"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 14">
+
+                                <Label
+                                    Text="{Binding .}"
+                                    TextColor="White"
+                                    FontAttributes="Bold"
+                                    FontSize="13" />
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+
                 <Label
-                    Text="{Binding SelectedDateText}"
+                    Text="Предстоящи напомняния"
                     FontSize="22"
                     FontAttributes="Bold"
                     TextColor="#111827" />
 
-                <!-- Events -->
-                <CollectionView
-                    ItemsSource="{Binding CalendarEvents}">
-
+                <CollectionView ItemsSource="{Binding CalendarEvents}">
                     <CollectionView.EmptyView>
-
                         <VerticalStackLayout
                             Padding="0,40,0,0"
                             Spacing="12"
@@ -72,27 +90,76 @@
                                 HorizontalTextAlignment="Center" />
 
                             <Label
-                                Text="Няма събития"
+                                Text="Няма напомняния"
                                 FontSize="20"
                                 FontAttributes="Bold"
                                 TextColor="#111827"
                                 HorizontalTextAlignment="Center" />
 
                             <Label
-                                Text="За избраната дата няма събития."
+                                Text="Предстоящите напомняния ще се появят тук."
                                 FontSize="14"
                                 TextColor="#6B7280"
                                 HorizontalTextAlignment="Center"
                                 MaximumWidthRequest="260" />
-
                         </VerticalStackLayout>
-
                     </CollectionView.EmptyView>
 
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                Margin="0,0,0,12"
+                                Padding="16"
+                                BackgroundColor="White"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 22">
+
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenEditReminderCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                
+                                <VerticalStackLayout Spacing="8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label
+                                            Text="{Binding Title}"
+                                            FontSize="18"
+                                            FontAttributes="Bold"
+                                            TextColor="#111827" />
+
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="{Binding Type}"
+                                            FontSize="13"
+                                            FontAttributes="Bold"
+                                            TextColor="#2563EB"
+                                            VerticalOptions="Center" />
+                                    </Grid>
+
+                                    <Label
+                                        Text="{Binding VehicleName}"
+                                        FontSize="14"
+                                        TextColor="#6B7280" />
+
+                                    <Label
+                                        Text="{Binding DateText}"
+                                        FontSize="13"
+                                        TextColor="#F59E0B"
+                                        FontAttributes="Bold" />
+
+                                    <Label
+                                        Text="{Binding Notes}"
+                                        FontSize="13"
+                                        TextColor="#6B7280"
+                                        IsVisible="{Binding HasNotes}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
                 </CollectionView>
 
             </VerticalStackLayout>
-
         </ScrollView>
 
     </Grid>

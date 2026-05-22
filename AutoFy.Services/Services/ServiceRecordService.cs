@@ -56,4 +56,35 @@ public class ServiceRecordService : IServiceRecordService
             .Select(ServiceRecordMapper.ToDto)
             .ToList();
     }
+
+    public async Task<ServiceRecordDto?> GetByIdAsync(int id)
+    {
+        var serviceRecord = await serviceRecordRepository.GetByIdAsync(id);
+
+        return serviceRecord == null
+            ? null
+            : ServiceRecordMapper.ToDto(serviceRecord);
+    }
+
+    public async Task UpdateAsync(ServiceRecordDto serviceRecordDto)
+    {
+        var existingServiceRecord = await serviceRecordRepository.GetByIdAsync(serviceRecordDto.Id);
+
+        if (existingServiceRecord == null)
+            return;
+
+        ServiceRecordMapper.UpdateEntity(existingServiceRecord, serviceRecordDto);
+
+        await serviceRecordRepository.UpdateAsync(existingServiceRecord);
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var serviceRecord = await serviceRecordRepository.GetByIdAsync(id);
+
+        if (serviceRecord == null)
+            return;
+
+        await serviceRecordRepository.DeleteAsync(serviceRecord);
+    }
 }

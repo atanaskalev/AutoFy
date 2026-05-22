@@ -9,7 +9,7 @@ public class StatisticsViewModel : BaseViewModel
 {
     private readonly IStatisticsService statisticsService;
 
-    private string _totalCostText = "0.00 лв";
+    private string _totalCostText = "0.00 €";
 
     public string TotalCostText
     {

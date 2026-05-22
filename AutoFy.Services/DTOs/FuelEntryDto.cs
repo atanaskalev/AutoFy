@@ -21,9 +21,9 @@ public class FuelEntryDto
 
     public string DateText => Date.ToString("dd.MM.yyyy");
     public string OdometerText => $"{Odometer} км";
-    public string TotalPriceText => $"{TotalPrice:F2} лв";
+    public string TotalPriceText => $"{TotalPrice:F2} €";
     public string LitersText => $"{Liters:F2} л";
     public string ConsumptionText => Consumption.HasValue ? $"{Consumption.Value:F2}" : "-";
-    public string PricePerLiterText => $"{PricePerLiter:F2} лв";
+    public string PricePerLiterText => $"{PricePerLiter:F2} €";
     public bool HasNotes => !string.IsNullOrWhiteSpace(Notes);
 }

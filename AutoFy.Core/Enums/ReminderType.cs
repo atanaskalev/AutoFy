@@ -2,11 +2,11 @@
 
 public enum ReminderType
 {
-    TechnicalInspection = 1,
-    Insurance = 2,
-    Vignette = 3,
-    FireExtinguisher = 4,
-    Maintenance = 5,
-    Service = 6,
-    Other = 7
+    ТехническиПреглед = 1,
+    ГражданскаОтговорност = 2,
+    Винетка = 3,
+    Пожарогасител = 4,
+    Обслужване = 5,
+    Сервиз = 6,
+    Друго = 7
 }

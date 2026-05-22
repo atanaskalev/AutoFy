@@ -89,12 +89,12 @@ public class HistoryService : IHistoryService
     {
         return serviceType switch
         {
-            Core.Enums.ServiceType.Maintenance => "Обслужване",
-            Core.Enums.ServiceType.Repair => "Ремонт",
-            Core.Enums.ServiceType.TireChange => "Смяна на гуми",
-            Core.Enums.ServiceType.Diagnostics => "Диагностика",
-            Core.Enums.ServiceType.TechnicalInspection => "Технически преглед",
-            Core.Enums.ServiceType.Other => "Друго",
+            Core.Enums.ServiceType.Обслужване => "Обслужване",
+            Core.Enums.ServiceType.Ремонт => "Ремонт",
+            Core.Enums.ServiceType.СмянаНаГуми => "Смяна на гуми",
+            Core.Enums.ServiceType.Диагностика => "Диагностика",
+            Core.Enums.ServiceType.ТехническиПреглед => "Технически преглед",
+            Core.Enums.ServiceType.Друго => "Друго",
             _ => "Друго"
         };
     }

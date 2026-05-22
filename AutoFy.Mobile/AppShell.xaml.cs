@@ -47,7 +47,6 @@ public partial class AppShell : Shell
         Items.Add(CreateFlyoutItem("Календар", nameof(CalendarView), _serviceProvider.GetRequiredService<CalendarView>));
         Items.Add(CreateFlyoutItem("Статистика", nameof(StatisticsView), _serviceProvider.GetRequiredService<StatisticsView>));
         Items.Add(CreateFlyoutItem("История", nameof(HistoryView), _serviceProvider.GetRequiredService<HistoryView>));
-        Items.Add(CreateFlyoutItem("Настройки", nameof(SettingsView), _serviceProvider.GetRequiredService<SettingsView>));
     }
 
     private static FlyoutItem CreateFlyoutItem<TView>(

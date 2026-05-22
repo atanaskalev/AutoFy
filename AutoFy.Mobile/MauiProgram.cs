@@ -5,7 +5,6 @@ using AutoFy.Mobile.ViewModels;
 using AutoFy.Mobile.Views;
 using AutoFy.Services.Interfaces;
 using AutoFy.Services.Services;
-using AutoFy.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
@@ -56,13 +55,13 @@ public static class MauiProgram
         builder.Services.AddScoped<IServiceRecordService, ServiceRecordService>();
         builder.Services.AddScoped<IHistoryService, HistoryService>();
         builder.Services.AddScoped<IStatisticsService, StatisticsService>();
+        builder.Services.AddScoped<ICalendarService, CalendarService>();
 
         // Views
         builder.Services.AddTransient<HomeView>();
         builder.Services.AddTransient<CalendarView>();
         builder.Services.AddTransient<StatisticsView>();
         builder.Services.AddTransient<HistoryView>();
-        builder.Services.AddTransient<SettingsView>();
         builder.Services.AddTransient<AboutView>();
         builder.Services.AddTransient<VehicleDetailsView>();
         builder.Services.AddTransient<AddVehicleView>();
@@ -77,7 +76,6 @@ public static class MauiProgram
         builder.Services.AddTransient<CalendarViewModel>();
         builder.Services.AddTransient<StatisticsViewModel>();
         builder.Services.AddTransient<HistoryViewModel>();
-        builder.Services.AddTransient<SettingsViewModel>();
         builder.Services.AddTransient<AboutViewModel>();
         builder.Services.AddTransient<VehicleDetailsViewModel>();
         builder.Services.AddTransient<AddVehicleViewModel>();

@@ -1,25 +1,36 @@
-﻿using System.Windows.Input;
+﻿using AutoFy.Core.Enums;
+using AutoFy.Core.Models;
+using AutoFy.Services.Interfaces;
+using System.Windows.Input;
 
 namespace AutoFy.Mobile.ViewModels;
 
-public class AddReminderViewModel : BaseViewModel
+public class AddReminderViewModel : BaseViewModel, IQueryAttributable
 {
-    private string _selectedVehicle = string.Empty;
-    private string _reminderType = string.Empty;
-    private string _notes = string.Empty;
+    private readonly IReminderService reminderService;
+    private readonly IVehicleService vehicleService;
 
+    private int vehicleId;
+    private int? reminderId;
+
+    private string _vehicleName = string.Empty;
+    private ReminderType _selectedReminderType = ReminderType.Друго;
+    private string _notes = string.Empty;
     private DateTime _reminderDate = DateTime.Today;
 
-    public string SelectedVehicle
+    public IEnumerable<ReminderType> ReminderTypes =>
+        Enum.GetValues(typeof(ReminderType)).Cast<ReminderType>();
+
+    public string VehicleName
     {
-        get => _selectedVehicle;
-        set => SetProperty(ref _selectedVehicle, value);
+        get => _vehicleName;
+        set => SetProperty(ref _vehicleName, value);
     }
 
-    public string ReminderType
+    public ReminderType SelectedReminderType
     {
-        get => _reminderType;
-        set => SetProperty(ref _reminderType, value);
+        get => _selectedReminderType;
+        set => SetProperty(ref _selectedReminderType, value);
     }
 
     public string Notes
@@ -34,18 +45,139 @@ public class AddReminderViewModel : BaseViewModel
         set => SetProperty(ref _reminderDate, value);
     }
 
-    public ICommand SaveReminderCommand { get; }
+    public string SaveButtonText =>
+        reminderId.HasValue ? "Запази промените" : "Запази напомнянето";
 
-    public AddReminderViewModel()
+    public bool IsEditMode => reminderId.HasValue;
+
+    public ICommand SaveReminderCommand { get; }
+    public ICommand DeleteReminderCommand { get; }
+
+    public AddReminderViewModel(
+        IReminderService reminderService,
+        IVehicleService vehicleService)
     {
+        this.reminderService = reminderService;
+        this.vehicleService = vehicleService;
+
         Title = "Добави напомняне";
 
-        SaveReminderCommand = new Command(async () =>
+        SaveReminderCommand = new Command(async () => await SaveReminderAsync());
+        DeleteReminderCommand = new Command(async () => await DeleteReminderAsync());
+    }
+
+    public async void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.TryGetValue("ReminderId", out var reminderIdValue) &&
+            int.TryParse(reminderIdValue?.ToString(), out var parsedReminderId))
         {
-            await Shell.Current.DisplayAlert(
-                "AutoFy",
-                "Напомнянето ще бъде записано по-късно.",
-                "OK");
-        });
+            reminderId = parsedReminderId;
+            Title = "Редактирай напомняне";
+
+            OnPropertyChanged(nameof(SaveButtonText));
+            OnPropertyChanged(nameof(IsEditMode));
+
+            await LoadReminderAsync(parsedReminderId);
+            return;
+        }
+
+        if (query.TryGetValue("VehicleId", out var vehicleIdValue) &&
+            int.TryParse(vehicleIdValue?.ToString(), out vehicleId))
+        {
+            var vehicle = await vehicleService.GetByIdAsync(vehicleId);
+
+            if (vehicle != null)
+                VehicleName = vehicle.DisplayName;
+        }
+    }
+
+    private async Task LoadReminderAsync(int id)
+    {
+        var reminder = await reminderService.GetByIdAsync(id);
+
+        if (reminder == null)
+            return;
+
+        vehicleId = reminder.VehicleId;
+
+        var vehicle = await vehicleService.GetByIdAsync(vehicleId);
+
+        if (vehicle != null)
+            VehicleName = vehicle.DisplayName;
+
+        SelectedReminderType = reminder.ReminderType;
+        ReminderDate = reminder.ReminderDate;
+        Notes = reminder.Notes ?? string.Empty;
+    }
+
+    private async Task SaveReminderAsync()
+    {
+        if (vehicleId <= 0)
+        {
+            await Shell.Current.DisplayAlertAsync("Грешка", "Не е избран автомобил.", "OK");
+            return;
+        }
+
+        if (reminderId.HasValue)
+        {
+            var reminder = await reminderService.GetByIdAsync(reminderId.Value);
+
+            if (reminder == null)
+                return;
+
+            reminder.VehicleId = vehicleId;
+            reminder.ReminderType = SelectedReminderType;
+            reminder.ReminderDate = ReminderDate;
+            reminder.Notes = Notes?.Trim();
+            reminder.IsCompleted = false;
+
+            await reminderService.UpdateAsync(reminder);
+        }
+        else
+        {
+            var reminder = new Reminder
+            {
+                VehicleId = vehicleId,
+                ReminderType = SelectedReminderType,
+                ReminderDate = ReminderDate,
+                Notes = Notes?.Trim(),
+                IsCompleted = false
+            };
+
+            await reminderService.AddAsync(reminder);
+        }
+
+        await Shell.Current.DisplayAlertAsync(
+            "AutoFy",
+            reminderId.HasValue
+                ? "Напомнянето е редактирано успешно."
+                : "Напомнянето е записано успешно.",
+            "OK");
+
+        await Shell.Current.GoToAsync("..");
+    }
+
+    private async Task DeleteReminderAsync()
+    {
+        if (!reminderId.HasValue)
+            return;
+
+        var confirmed = await Shell.Current.DisplayAlertAsync(
+            "Изтриване",
+            "Сигурен ли си, че искаш да изтриеш това напомняне?",
+            "Да",
+            "Не");
+
+        if (!confirmed)
+            return;
+
+        await reminderService.DeleteAsync(reminderId.Value);
+
+        await Shell.Current.DisplayAlertAsync(
+            "AutoFy",
+            "Напомнянето е изтрито успешно.",
+            "OK");
+
+        await Shell.Current.GoToAsync("..");
     }
 }

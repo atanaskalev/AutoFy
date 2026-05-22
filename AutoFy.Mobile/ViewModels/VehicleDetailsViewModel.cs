@@ -15,6 +15,7 @@ public class VehicleDetailsViewModel : BaseViewModel, IQueryAttributable
     private string _vehicleName = string.Empty;
     private string _vehicleShortInfo = string.Empty;
     private string _licensePlate = string.Empty;
+    private string _vin = string.Empty;
 
     private string _averageFuelConsumption = "-";
     private string _totalVehicleCost = "-";
@@ -30,9 +31,9 @@ public class VehicleDetailsViewModel : BaseViewModel, IQueryAttributable
     private string _vignetteDateText = "-";
     private string _fireExtinguisherDateText = "-";
 
-    private string _lastFuelEntryText = "Няма зареждания";
+    private string _lastFuelEntryText = "";
     private string _totalFuelLiters = "0 л";
-    private string _totalFuelCost = "0 лв";
+    private string _totalFuelCost = "0 €";
 
     private string _lastServiceRecordText = "Няма добавени сервизни дейности";
 
@@ -58,6 +59,12 @@ public class VehicleDetailsViewModel : BaseViewModel, IQueryAttributable
     {
         get => _licensePlate;
         set => SetProperty(ref _licensePlate, value);
+    }
+
+    public string Vin
+    {
+        get => _vin;
+        set => SetProperty(ref _vin, value);
     }
 
     public string AverageFuelConsumption
@@ -174,7 +181,7 @@ public class VehicleDetailsViewModel : BaseViewModel, IQueryAttributable
             await Shell.Current.GoToAsync($"{nameof(FuelHistoryView)}?VehicleId={vehicleId}"));
 
         OpenAddReminderCommand = new Command(async () =>
-            await Shell.Current.GoToAsync(nameof(AddReminderView)));
+            await Shell.Current.GoToAsync($"{nameof(AddReminderView)}?VehicleId={vehicleId}"));
 
         OpenAddServiceRecordCommand = new Command(async () =>
             await Shell.Current.GoToAsync($"{nameof(AddServiceRecordView)}?VehicleId={vehicleId}"));
@@ -214,6 +221,9 @@ public class VehicleDetailsViewModel : BaseViewModel, IQueryAttributable
         LicensePlate = string.IsNullOrWhiteSpace(vehicle.LicensePlate)
             ? "Няма регистрационен номер"
             : vehicle.LicensePlate;
+        Vin = string.IsNullOrWhiteSpace(vehicle.Vin)
+            ? "Няма VIN"
+            : vehicle.Vin;
 
         TechnicalInspectionDateText = FormatDate(vehicle.TechnicalInspectionDate);
         TechnicalInspectionPriceText = $"{vehicle.TechnicalInspectionPrice:F2} €";
@@ -251,7 +261,7 @@ public class VehicleDetailsViewModel : BaseViewModel, IQueryAttributable
             ? "Няма добавени сервизни дейности"
             : $"Последна дейност: {lastServiceRecord.ServiceType} - {lastServiceRecord.Price:F2} €";
 
-        TotalVehicleCost = $"{totalFuelCost + totalServiceCost + fixedCosts:F2} лв";
+        TotalVehicleCost = $"{totalFuelCost + totalServiceCost + fixedCosts:F2} €";
     }
 
     private async Task DeleteVehicleAsync()

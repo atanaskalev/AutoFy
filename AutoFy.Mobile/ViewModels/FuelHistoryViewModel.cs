@@ -1,6 +1,7 @@
 ﻿using AutoFy.Services.DTOs;
 using AutoFy.Services.Interfaces;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace AutoFy.Mobile.ViewModels;
 
@@ -21,12 +22,23 @@ public class FuelHistoryViewModel : BaseViewModel, IQueryAttributable
 
     public ObservableCollection<FuelEntryDto> FuelEntries { get; } = new();
 
+    public ICommand OpenEditFuelEntryCommand { get; }
+
     public FuelHistoryViewModel(
         IFuelService fuelService,
         IVehicleService vehicleService)
     {
         this.fuelService = fuelService;
         this.vehicleService = vehicleService;
+
+        OpenEditFuelEntryCommand = new Command<FuelEntryDto>(async fuelEntry =>
+        {
+            if (fuelEntry == null)
+                return;
+
+            await Shell.Current.GoToAsync(
+                $"{nameof(Views.AddFuelEntryView)}?FuelEntryId={fuelEntry.Id}");
+        });
 
         Title = "История на зареждания";
     }

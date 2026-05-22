@@ -6,5 +6,5 @@ public class StatisticsSummaryDto
 
     public List<VehicleStatisticsDto> Vehicles { get; set; } = new();
 
-    public string TotalCostText => $"{TotalCost:F2} лв";
+    public string TotalCostText => $"{TotalCost:F2} €";
 }

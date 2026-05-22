@@ -1,6 +1,7 @@
 ﻿using AutoFy.Services.DTOs;
 using AutoFy.Services.Interfaces;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace AutoFy.Mobile.ViewModels;
 
@@ -20,12 +21,23 @@ public class ServiceHistoryViewModel : BaseViewModel, IQueryAttributable
 
     public ObservableCollection<ServiceRecordDto> ServiceRecords { get; } = new();
 
+    public ICommand OpenEditServiceRecordCommand { get; }
+
     public ServiceHistoryViewModel(
         IServiceRecordService serviceRecordService,
         IVehicleService vehicleService)
     {
         this.serviceRecordService = serviceRecordService;
         this.vehicleService = vehicleService;
+
+        OpenEditServiceRecordCommand = new Command<ServiceRecordDto>(async serviceRecord =>
+        {
+            if (serviceRecord == null)
+                return;
+
+            await Shell.Current.GoToAsync(
+                $"{nameof(Views.AddServiceRecordView)}?ServiceRecordId={serviceRecord.Id}");
+        });
 
         Title = "История на сервиз";
     }

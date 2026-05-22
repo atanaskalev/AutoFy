@@ -1,12 +1,17 @@
-﻿using System.Collections.ObjectModel;
+﻿using AutoFy.Services.DTOs;
+using AutoFy.Services.Interfaces;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace AutoFy.Mobile.ViewModels;
 
 public class CalendarViewModel : BaseViewModel
 {
+    private readonly ICalendarService calendarService;
+
     private DateTime _selectedDate = DateTime.Today;
 
-    private ObservableCollection<object> _calendarEvents = [];
+    private List<DateTime> eventDates = new();
 
     public DateTime SelectedDate
     {
@@ -14,23 +19,78 @@ public class CalendarViewModel : BaseViewModel
         set
         {
             if (SetProperty(ref _selectedDate, value))
-            {
                 OnPropertyChanged(nameof(SelectedDateText));
-            }
         }
+    }
+
+    public List<DateTime> EventDates
+    {
+        get => eventDates;
+        set => SetProperty(ref eventDates, value);
     }
 
     public string SelectedDateText =>
         SelectedDate.ToString("dd MMMM yyyy");
 
-    public ObservableCollection<object> CalendarEvents
+    public ObservableCollection<CalendarEventDto> CalendarEvents { get; } = new();
+
+    public ObservableCollection<string> EventDateTexts { get; } = new();
+
+    public ICommand LoadEventsCommand { get; }
+
+    public ICommand OpenEditReminderCommand { get; }
+
+    public CalendarViewModel(ICalendarService calendarService)
     {
-        get => _calendarEvents;
-        set => SetProperty(ref _calendarEvents, value);
+        this.calendarService = calendarService;
+
+        OpenEditReminderCommand = new Command<CalendarEventDto>(async calendarEvent =>
+        {
+            if (calendarEvent == null || !calendarEvent.ReminderId.HasValue)
+                return;
+
+            await Shell.Current.GoToAsync(
+                $"{nameof(Views.AddReminderView)}?ReminderId={calendarEvent.ReminderId.Value}");
+        });
+
+        Title = "Календар";
+
+        LoadEventsCommand = new Command(async () => await LoadEventsAsync());
     }
 
-    public CalendarViewModel()
+    private async Task LoadEventsAsync()
     {
-        Title = "Календар";
+        if (IsBusy)
+            return;
+
+        try
+        {
+            IsBusy = true;
+
+            await calendarService.DeleteExpiredRemindersAsync();
+
+            CalendarEvents.Clear();
+            EventDateTexts.Clear();
+
+            var events = await calendarService.GetAllActiveEventsAsync();
+
+            foreach (var calendarEvent in events)
+                CalendarEvents.Add(calendarEvent);
+
+            var dates = await calendarService.GetEventDatesAsync();
+
+            EventDates = dates
+                .Select(x => x.Date)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+
+            foreach (var date in EventDates)
+                EventDateTexts.Add(date.ToString("dd.MM.yyyy"));
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 }

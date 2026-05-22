@@ -2,10 +2,10 @@
 
 public enum ServiceType
 {
-    Maintenance = 1,
-    Repair = 2,
-    TireChange = 3,
-    Diagnostics = 4,
-    TechnicalInspection = 5,
-    Other = 6
+    Обслужване = 1,
+    Ремонт = 2,
+    СмянаНаГуми = 3,
+    Диагностика = 4,
+    ТехническиПреглед = 5,
+    Друго = 6
 }

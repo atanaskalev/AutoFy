@@ -16,7 +16,7 @@
                 StrokeShape="RoundRectangle 28"
                 Padding="18">
 
-                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
 
                     <Label
                         Text="{Binding VehicleName}" 
@@ -37,9 +37,16 @@
                         TextColor="#9CA3AF"
                         Margin="0,6,0,0" />
 
+                    <Label
+                        Grid.Row="3"
+                        Text="{Binding Vin}"
+                        FontSize="13"
+                        TextColor="#9CA3AF"
+                        Margin="0,4,0,0" />
+
                     <Border
                         Grid.Column="1"
-                        Grid.RowSpan="3"
+                        Grid.RowSpan="4"
                         WidthRequest="78"
                         HeightRequest="78"
                         BackgroundColor="#374151"
@@ -63,21 +70,21 @@
                 <Border Grid.Column="0" BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 22" Padding="14">
                     <VerticalStackLayout Spacing="4">
                         <Label Text="Последен разход" FontSize="13" TextColor="#6B7280" />
-                        <Label Text="{Binding LastConsumption}" FontSize="22" FontAttributes="Bold" TextColor="#111827" />
+                        <Label Text="{Binding LastConsumption}" FontSize="19" FontAttributes="Bold" TextColor="#111827" />
                     </VerticalStackLayout>
                 </Border>
 
                 <Border Grid.Column="1" BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 22" Padding="14">
                     <VerticalStackLayout Spacing="4">
                         <Label Text="Среден разход" FontSize="13" TextColor="#6B7280" />
-                        <Label Text="{Binding AverageFuelConsumption}" FontSize="22" FontAttributes="Bold" TextColor="#111827" />
+                        <Label Text="{Binding AverageFuelConsumption}" FontSize="19" FontAttributes="Bold" TextColor="#111827" />
                     </VerticalStackLayout>
                 </Border>
 
                 <Border Grid.Column="2" BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 22" Padding="14">
                     <VerticalStackLayout Spacing="4">
                         <Label Text="Общо разходи" FontSize="13" TextColor="#6B7280" />
-                        <Label Text="{Binding TotalVehicleCost}" FontSize="22" FontAttributes="Bold" TextColor="#111827" />
+                        <Label Text="{Binding TotalVehicleCost}" FontSize="19" FontAttributes="Bold" TextColor="#111827" />
                     </VerticalStackLayout>
                 </Border>
 

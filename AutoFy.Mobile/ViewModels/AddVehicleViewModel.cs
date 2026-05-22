@@ -298,12 +298,12 @@ public class AddVehicleViewModel : BaseViewModel, IQueryAttributable
     {
         return value switch
         {
-            "Бензин" => FuelType.Petrol,
-            "Дизел" => FuelType.Diesel,
-            "Газ" => FuelType.Gas,
-            "Хибрид" => FuelType.Hybrid,
-            "Електрически" => FuelType.Electric,
-            _ => FuelType.Petrol
+            "Бензин" => FuelType.Бензин,
+            "Дизел" => FuelType.Дизел,
+            "Газ" => FuelType.Газ,
+            "Хибрид" => FuelType.Хибрид,
+            "Електрически" => FuelType.Електрически,
+            _ => FuelType.Бензин
         };
     }
 
@@ -311,9 +311,9 @@ public class AddVehicleViewModel : BaseViewModel, IQueryAttributable
     {
         return value switch
         {
-            "Автоматична" => TransmissionType.Automatic,
-            "Ръчна" => TransmissionType.Manual,
-            _ => TransmissionType.Manual
+            "Автоматична" => TransmissionType.Автоматична,
+            "Ръчна" => TransmissionType.Ръчна,
+            _ => TransmissionType.Ръчна
         };
     }
 
@@ -321,11 +321,11 @@ public class AddVehicleViewModel : BaseViewModel, IQueryAttributable
     {
         return fuelType switch
         {
-            FuelType.Petrol => "Бензин",
-            FuelType.Diesel => "Дизел",
-            FuelType.Gas => "Газ",
-            FuelType.Hybrid => "Хибрид",
-            FuelType.Electric => "Електрически",
+            FuelType.Бензин => "Бензин",
+            FuelType.Дизел => "Дизел",
+            FuelType.Газ => "Газ",
+            FuelType.Хибрид => "Хибрид",
+            FuelType.Електрически => "Електрически",
             _ => "Бензин"
         };
     }
@@ -334,8 +334,8 @@ public class AddVehicleViewModel : BaseViewModel, IQueryAttributable
     {
         return transmissionType switch
         {
-            TransmissionType.Automatic => "Автоматична",
-            TransmissionType.Manual => "Ръчна",
+            TransmissionType.Автоматична => "Автоматична",
+            TransmissionType.Ръчна => "Ръчна",
             _ => "Ръчна"
         };
     }
