@@ -1,14 +1,16 @@
 ﻿using AutoFy.Data.Context;
 using AutoFy.Data.Repositories.Implementations;
 using AutoFy.Data.Repositories.Interfaces;
+using AutoFy.Mobile.Services.Notifications;
 using AutoFy.Mobile.ViewModels;
 using AutoFy.Mobile.Views;
 using AutoFy.Services.Interfaces;
 using AutoFy.Services.Services;
+using CommunityToolkit.Maui;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Plugin.LocalNotification;
 using Syncfusion.Maui.Core.Hosting;
-using CommunityToolkit.Maui;
 
 namespace AutoFy.Mobile;
 
@@ -21,6 +23,7 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
+            .UseLocalNotification()
             .ConfigureSyncfusionCore()
             .ConfigureFonts(fonts =>
             {
@@ -56,6 +59,7 @@ public static class MauiProgram
         builder.Services.AddScoped<IHistoryService, HistoryService>();
         builder.Services.AddScoped<IStatisticsService, StatisticsService>();
         builder.Services.AddScoped<ICalendarService, CalendarService>();
+        builder.Services.AddSingleton<INotificationSchedulerService, NotificationSchedulerService>();
 
         // Views
         builder.Services.AddTransient<HomeView>();

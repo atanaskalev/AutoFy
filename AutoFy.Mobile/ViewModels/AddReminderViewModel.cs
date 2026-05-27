@@ -1,5 +1,6 @@
 ﻿using AutoFy.Core.Enums;
 using AutoFy.Core.Models;
+using AutoFy.Mobile.Services.Notifications;
 using AutoFy.Services.Interfaces;
 using System.Windows.Input;
 
@@ -9,6 +10,7 @@ public class AddReminderViewModel : BaseViewModel, IQueryAttributable
 {
     private readonly IReminderService reminderService;
     private readonly IVehicleService vehicleService;
+    private readonly INotificationSchedulerService notificationSchedulerService;
 
     private int vehicleId;
     private int? reminderId;
@@ -55,10 +57,12 @@ public class AddReminderViewModel : BaseViewModel, IQueryAttributable
 
     public AddReminderViewModel(
         IReminderService reminderService,
-        IVehicleService vehicleService)
+        IVehicleService vehicleService,
+        INotificationSchedulerService notificationSchedulerService)
     {
         this.reminderService = reminderService;
         this.vehicleService = vehicleService;
+        this.notificationSchedulerService = notificationSchedulerService;
 
         Title = "Добави напомняне";
 
@@ -132,6 +136,14 @@ public class AddReminderViewModel : BaseViewModel, IQueryAttributable
             reminder.IsCompleted = false;
 
             await reminderService.UpdateAsync(reminder);
+
+            await notificationSchedulerService.RequestPermissionAsync();
+
+            await notificationSchedulerService.ScheduleReminderNotificationsAsync(
+                reminder.Id,
+                reminder.ReminderDate,
+                reminder.ReminderType.ToString(),
+                VehicleName);
         }
         else
         {
@@ -145,6 +157,14 @@ public class AddReminderViewModel : BaseViewModel, IQueryAttributable
             };
 
             await reminderService.AddAsync(reminder);
+
+            await notificationSchedulerService.RequestPermissionAsync();
+
+            await notificationSchedulerService.ScheduleReminderNotificationsAsync(
+                reminder.Id,
+                reminder.ReminderDate,
+                reminder.ReminderType.ToString(),
+                VehicleName);
         }
 
         await Shell.Current.DisplayAlertAsync(
@@ -170,6 +190,8 @@ public class AddReminderViewModel : BaseViewModel, IQueryAttributable
 
         if (!confirmed)
             return;
+
+        await notificationSchedulerService.CancelReminderNotificationsAsync(reminderId.Value);
 
         await reminderService.DeleteAsync(reminderId.Value);
 
