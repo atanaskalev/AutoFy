@@ -8,6 +8,8 @@ namespace AutoFy.Mobile.ViewModels;
 
 public class AddFuelEntryViewModel : BaseViewModel, IQueryAttributable
 {
+    #region Fields
+
     private readonly IFuelService fuelService;
     private readonly IVehicleService vehicleService;
 
@@ -26,6 +28,25 @@ public class AddFuelEntryViewModel : BaseViewModel, IQueryAttributable
 
     private string _calculatedConsumption = "-";
     private string _calculatedCostPerKm = "-";
+
+    #endregion
+
+    #region Init
+
+    public AddFuelEntryViewModel(IFuelService fuelService, IVehicleService vehicleService)
+    {
+        this.fuelService = fuelService;
+        this.vehicleService = vehicleService;
+
+        Title = "Добави зареждане";
+
+        SaveFuelCommand = new Command(async () => await SaveFuelAsync());
+        DeleteFuelCommand = new Command(async () => await DeleteFuelAsync());
+    }
+
+    #endregion
+
+    #region Properties
 
     public string VehicleName
     {
@@ -102,21 +123,16 @@ public class AddFuelEntryViewModel : BaseViewModel, IQueryAttributable
     public string SaveButtonText =>
         fuelEntryId.HasValue ? "Запази промените" : "Запази зареждането";
 
+    #endregion
+
+    #region Commands
+
     public ICommand SaveFuelCommand { get; }
     public ICommand DeleteFuelCommand { get; }
 
-    public AddFuelEntryViewModel(
-        IFuelService fuelService,
-        IVehicleService vehicleService)
-    {
-        this.fuelService = fuelService;
-        this.vehicleService = vehicleService;
+    #endregion
 
-        Title = "Добави зареждане";
-
-        SaveFuelCommand = new Command(async () => await SaveFuelAsync());
-        DeleteFuelCommand = new Command(async () => await DeleteFuelAsync());
-    }
+    #region Methods
 
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
@@ -305,4 +321,6 @@ public class AddFuelEntryViewModel : BaseViewModel, IQueryAttributable
             CultureInfo.InvariantCulture,
             out result);
     }
+    #endregion
+
 }

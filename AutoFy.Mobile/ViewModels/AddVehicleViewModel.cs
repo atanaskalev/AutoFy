@@ -8,6 +8,8 @@ namespace AutoFy.Mobile.ViewModels;
 
 public class AddVehicleViewModel : BaseViewModel, IQueryAttributable
 {
+    #region Fields
+
     private readonly IVehicleService vehicleService;
 
     private int? vehicleId;
@@ -32,6 +34,25 @@ public class AddVehicleViewModel : BaseViewModel, IQueryAttributable
     private DateTime _insuranceDate = DateTime.Today;
     private DateTime _vignetteDate = DateTime.Today;
     private DateTime _fireExtinguisherDate = DateTime.Today;
+
+    #endregion
+
+    #region Init
+
+    public AddVehicleViewModel(IVehicleService vehicleService)
+    {
+        this.vehicleService = vehicleService;
+
+        Title = "Добави автомобил";
+
+        SaveVehicleCommand = new Command(async () => await SaveVehicleAsync());
+        PickImageCommand = new Command(async () => await PickImageAsync());
+        RemoveImageCommand = new Command(RemoveImage);
+    }
+
+    #endregion
+
+    #region Properties
 
     public string Brand
     {
@@ -159,20 +180,17 @@ public class AddVehicleViewModel : BaseViewModel, IQueryAttributable
         ? "Запази промените"
         : "Добави автомобил";
 
+    #endregion
+
+    #region Commands
+
     public ICommand SaveVehicleCommand { get; }
     public ICommand PickImageCommand { get; }
     public ICommand RemoveImageCommand { get; }
 
-    public AddVehicleViewModel(IVehicleService vehicleService)
-    {
-        this.vehicleService = vehicleService;
+    #endregion
 
-        Title = "Добави автомобил";
-
-        SaveVehicleCommand = new Command(async () => await SaveVehicleAsync());
-        PickImageCommand = new Command(async () => await PickImageAsync());
-        RemoveImageCommand = new Command(RemoveImage);
-    }
+    #region Methods
 
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
@@ -344,4 +362,6 @@ public class AddVehicleViewModel : BaseViewModel, IQueryAttributable
     {
         ImagePath = null;
     }
+
+    #endregion
 }

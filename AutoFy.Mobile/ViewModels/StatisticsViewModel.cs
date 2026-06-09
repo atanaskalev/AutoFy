@@ -7,19 +7,15 @@ namespace AutoFy.Mobile.ViewModels;
 
 public class StatisticsViewModel : BaseViewModel
 {
+    #region Fields
+
     private readonly IStatisticsService statisticsService;
 
     private string _totalCostText = "0.00 €";
 
-    public string TotalCostText
-    {
-        get => _totalCostText;
-        set => SetProperty(ref _totalCostText, value);
-    }
+    #endregion
 
-    public ObservableCollection<VehicleStatisticsDto> Vehicles { get; } = new();
-
-    public ICommand LoadStatisticsCommand { get; }
+    #region Init
 
     public StatisticsViewModel(IStatisticsService statisticsService)
     {
@@ -29,6 +25,28 @@ public class StatisticsViewModel : BaseViewModel
 
         LoadStatisticsCommand = new Command(async () => await LoadStatisticsAsync());
     }
+
+    #endregion
+
+    #region Properties
+
+    public string TotalCostText
+    {
+        get => _totalCostText;
+        set => SetProperty(ref _totalCostText, value);
+    }
+
+    public ObservableCollection<VehicleStatisticsDto> Vehicles { get; } = new();
+
+    #endregion
+
+    #region Commands
+
+    public ICommand LoadStatisticsCommand { get; }
+
+    #endregion
+
+    #region Methods
 
     private async Task LoadStatisticsAsync()
     {
@@ -53,4 +71,6 @@ public class StatisticsViewModel : BaseViewModel
             IsBusy = false;
         }
     }
+
+    #endregion
 }

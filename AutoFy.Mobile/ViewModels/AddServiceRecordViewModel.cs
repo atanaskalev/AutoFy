@@ -9,6 +9,8 @@ namespace AutoFy.Mobile.ViewModels;
 
 public class AddServiceRecordViewModel : BaseViewModel, IQueryAttributable
 {
+    #region Fields
+
     private readonly IServiceRecordService serviceRecordService;
     private readonly IVehicleService vehicleService;
 
@@ -24,6 +26,25 @@ public class AddServiceRecordViewModel : BaseViewModel, IQueryAttributable
 
     private DateTime _serviceDate = DateTime.Today;
     private ServiceType _selectedServiceType = ServiceType.Обслужване;
+
+    #endregion
+
+    #region Init
+
+    public AddServiceRecordViewModel(IServiceRecordService serviceRecordService, IVehicleService vehicleService)
+    {
+        this.serviceRecordService = serviceRecordService;
+        this.vehicleService = vehicleService;
+
+        Title = "Добави сервизна дейност";
+
+        SaveServiceCommand = new Command(async () => await SaveServiceAsync());
+        DeleteServiceCommand = new Command(async () => await DeleteServiceAsync());
+    }
+
+    #endregion
+
+    #region Properties
 
     public IEnumerable<ServiceType> ServiceTypes =>
         Enum.GetValues(typeof(ServiceType)).Cast<ServiceType>();
@@ -81,21 +102,16 @@ public class AddServiceRecordViewModel : BaseViewModel, IQueryAttributable
 
     public bool IsEditMode => serviceRecordId.HasValue;
 
+    #endregion
+
+    #region Commands
+
     public ICommand SaveServiceCommand { get; }
     public ICommand DeleteServiceCommand { get; }
 
-    public AddServiceRecordViewModel(
-        IServiceRecordService serviceRecordService,
-        IVehicleService vehicleService)
-    {
-        this.serviceRecordService = serviceRecordService;
-        this.vehicleService = vehicleService;
+    #endregion
 
-        Title = "Добави сервизна дейност";
-
-        SaveServiceCommand = new Command(async () => await SaveServiceAsync());
-        DeleteServiceCommand = new Command(async () => await DeleteServiceAsync());
-    }
+    #region Methods
 
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
@@ -243,4 +259,6 @@ public class AddServiceRecordViewModel : BaseViewModel, IQueryAttributable
             CultureInfo.InvariantCulture,
             out result);
     }
+
+    #endregion
 }

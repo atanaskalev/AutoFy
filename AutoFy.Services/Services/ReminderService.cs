@@ -6,12 +6,22 @@ namespace AutoFy.Services.Services;
 
 public class ReminderService : IReminderService
 {
+    #region Fields
+
     private readonly IReminderRepository reminderRepository;
+
+    #endregion
+
+    #region Init
 
     public ReminderService(IReminderRepository reminderRepository)
     {
         this.reminderRepository = reminderRepository;
     }
+
+    #endregion
+
+    #region Methods
 
     public async Task<IEnumerable<Reminder>> GetAllAsync()
     {
@@ -52,4 +62,6 @@ public class ReminderService : IReminderService
 
         await reminderRepository.DeleteAsync(reminder);
     }
+
+    #endregion
 }

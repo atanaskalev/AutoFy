@@ -6,6 +6,8 @@ namespace AutoFy.Mobile.ViewModels;
 
 public class VehicleDetailsViewModel : BaseViewModel, IQueryAttributable
 {
+    #region Fields
+
     private readonly IVehicleService vehicleService;
     private readonly IFuelService fuelService;
     private readonly IServiceRecordService serviceRecordService;
@@ -36,6 +38,45 @@ public class VehicleDetailsViewModel : BaseViewModel, IQueryAttributable
     private string _totalFuelCost = "0 €";
 
     private string _lastServiceRecordText = "Няма добавени сервизни дейности";
+
+    #endregion
+
+    #region Init
+
+    public VehicleDetailsViewModel(IVehicleService vehicleService, IFuelService fuelService, IServiceRecordService serviceRecordService)
+    {
+        this.vehicleService = vehicleService;
+        this.fuelService = fuelService;
+        this.serviceRecordService = serviceRecordService;
+
+        Title = "Детайли за автомобил";
+
+        OpenAddFuelCommand = new Command(async () =>
+            await Shell.Current.GoToAsync($"{nameof(AddFuelEntryView)}?VehicleId={vehicleId}"));
+
+        OpenFuelHistoryCommand = new Command(async () =>
+            await Shell.Current.GoToAsync($"{nameof(FuelHistoryView)}?VehicleId={vehicleId}"));
+
+        OpenAddReminderCommand = new Command(async () =>
+            await Shell.Current.GoToAsync($"{nameof(AddReminderView)}?VehicleId={vehicleId}"));
+
+        OpenAddServiceRecordCommand = new Command(async () =>
+            await Shell.Current.GoToAsync($"{nameof(AddServiceRecordView)}?VehicleId={vehicleId}"));
+
+        DeleteVehicleCommand = new Command(async () => await DeleteVehicleAsync());
+
+        EditVehicleCommand = new Command(async () =>
+            await Shell.Current.GoToAsync($"{nameof(AddVehicleView)}?VehicleId={vehicleId}"));
+
+        OpenServiceHistoryCommand = new Command(async () =>
+            await Shell.Current.GoToAsync($"{nameof(ServiceHistoryView)}?VehicleId={vehicleId}"));
+
+        this.serviceRecordService = serviceRecordService;
+    }
+
+    #endregion
+
+    #region Properties
 
     public string? ImagePath
     {
@@ -157,45 +198,21 @@ public class VehicleDetailsViewModel : BaseViewModel, IQueryAttributable
         set => SetProperty(ref _lastServiceRecordText, value);
     }
 
+    #endregion
+
+    #region Commands
+
     public ICommand OpenAddFuelCommand { get; }
     public ICommand OpenFuelHistoryCommand { get; }
     public ICommand OpenAddReminderCommand { get; }
     public ICommand OpenAddServiceRecordCommand { get; }
     public ICommand DeleteVehicleCommand { get; }
     public ICommand EditVehicleCommand { get; }
-
     public ICommand OpenServiceHistoryCommand { get; }
 
-    public VehicleDetailsViewModel(IVehicleService vehicleService, IFuelService fuelService, IServiceRecordService serviceRecordService)
-    {
-        this.vehicleService = vehicleService;
-        this.fuelService = fuelService;
-        this.serviceRecordService = serviceRecordService;
+    #endregion
 
-        Title = "Детайли за автомобил";
-
-        OpenAddFuelCommand = new Command(async () =>
-            await Shell.Current.GoToAsync($"{nameof(AddFuelEntryView)}?VehicleId={vehicleId}"));
-
-        OpenFuelHistoryCommand = new Command(async () =>
-            await Shell.Current.GoToAsync($"{nameof(FuelHistoryView)}?VehicleId={vehicleId}"));
-
-        OpenAddReminderCommand = new Command(async () =>
-            await Shell.Current.GoToAsync($"{nameof(AddReminderView)}?VehicleId={vehicleId}"));
-
-        OpenAddServiceRecordCommand = new Command(async () =>
-            await Shell.Current.GoToAsync($"{nameof(AddServiceRecordView)}?VehicleId={vehicleId}"));
-
-        DeleteVehicleCommand = new Command(async () => await DeleteVehicleAsync());
-
-        EditVehicleCommand = new Command(async () =>
-            await Shell.Current.GoToAsync($"{nameof(AddVehicleView)}?VehicleId={vehicleId}"));
-
-        OpenServiceHistoryCommand = new Command(async () =>
-            await Shell.Current.GoToAsync($"{nameof(ServiceHistoryView)}?VehicleId={vehicleId}"));
-
-        this.serviceRecordService = serviceRecordService;
-    }
+    #region Methods
 
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
@@ -294,4 +311,6 @@ public class VehicleDetailsViewModel : BaseViewModel, IQueryAttributable
             ? date.Value.ToString("dd.MM.yyyy")
             : "-";
     }
+
+    #endregion
 }

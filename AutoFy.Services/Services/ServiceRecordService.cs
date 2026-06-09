@@ -8,12 +8,22 @@ namespace AutoFy.Services.Services;
 
 public class ServiceRecordService : IServiceRecordService
 {
+    #region Fields
+
     private readonly IServiceRecordRepository serviceRecordRepository;
+
+    #endregion
+
+    #region Init
 
     public ServiceRecordService(IServiceRecordRepository serviceRecordRepository)
     {
         this.serviceRecordRepository = serviceRecordRepository;
     }
+
+    #endregion
+
+    #region Methods
 
     public async Task<IEnumerable<ServiceRecord>> GetAllAsync()
     {
@@ -87,4 +97,6 @@ public class ServiceRecordService : IServiceRecordService
 
         await serviceRecordRepository.DeleteAsync(serviceRecord);
     }
+
+    #endregion
 }

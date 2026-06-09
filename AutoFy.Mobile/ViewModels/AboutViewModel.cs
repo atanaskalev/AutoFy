@@ -2,7 +2,22 @@
 
 public class AboutViewModel : BaseViewModel
 {
+    #region Fields
+
     private string _appVersion = "1.0.0";
+
+    #endregion
+
+    #region Init
+
+    public AboutViewModel()
+    {
+        Title = "За приложението";
+    }
+
+    #endregion
+
+    #region Properties
 
     public string AppVersion
     {
@@ -10,8 +25,5 @@ public class AboutViewModel : BaseViewModel
         set => SetProperty(ref _appVersion, value);
     }
 
-    public AboutViewModel()
-    {
-        Title = "За приложението";
-    }
+    #endregion
 }

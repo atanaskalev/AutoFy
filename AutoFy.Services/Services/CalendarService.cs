@@ -6,16 +6,24 @@ namespace AutoFy.Services.Services;
 
 public class CalendarService : ICalendarService
 {
+    #region Fields
+
     private readonly IVehicleRepository vehicleRepository;
     private readonly IReminderRepository reminderRepository;
 
-    public CalendarService(
-        IVehicleRepository vehicleRepository,
-        IReminderRepository reminderRepository)
+    #endregion
+
+    #region Init
+
+    public CalendarService(IVehicleRepository vehicleRepository,  IReminderRepository reminderRepository)
     {
         this.vehicleRepository = vehicleRepository;
         this.reminderRepository = reminderRepository;
     }
+
+    #endregion
+
+    #region Methods
 
     public async Task DeleteExpiredRemindersAsync()
     {
@@ -71,25 +79,6 @@ public class CalendarService : ICalendarService
             .ToList();
     }
 
-    private static void AddVehicleEvent(
-        List<CalendarEventDto> result,
-        DateTime? date,
-        string vehicleName,
-        string title)
-    {
-        if (!date.HasValue)
-            return;
-
-        result.Add(new CalendarEventDto
-        {
-            Date = date.Value,
-            VehicleName = vehicleName,
-            Title = title,
-            Type = "Годишен срок",
-            Notes = null
-        });
-    }
-
     public async Task<IEnumerable<DateTime>> GetEventDatesAsync()
     {
         var vehicles = await vehicleRepository.GetAllAsync();
@@ -116,9 +105,30 @@ public class CalendarService : ICalendarService
             .ToList();
     }
 
+    private static void AddVehicleEvent(
+        List<CalendarEventDto> result,
+        DateTime? date,
+        string vehicleName,
+        string title)
+    {
+        if (!date.HasValue)
+            return;
+
+        result.Add(new CalendarEventDto
+        {
+            Date = date.Value,
+            VehicleName = vehicleName,
+            Title = title,
+            Type = "Годишен срок",
+            Notes = null
+        });
+    }
+
     private static void AddDate(List<DateTime> dates, DateTime? date)
     {
         if (date.HasValue && date.Value.Date >= DateTime.Today)
             dates.Add(date.Value.Date);
     }
+
+    #endregion
 }

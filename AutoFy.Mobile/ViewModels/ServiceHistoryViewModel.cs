@@ -7,25 +7,19 @@ namespace AutoFy.Mobile.ViewModels;
 
 public class ServiceHistoryViewModel : BaseViewModel, IQueryAttributable
 {
+    #region Fields
+
     private readonly IServiceRecordService serviceRecordService;
     private readonly IVehicleService vehicleService;
 
     private int vehicleId;
     private string _vehicleName = string.Empty;
 
-    public string VehicleName
-    {
-        get => _vehicleName;
-        set => SetProperty(ref _vehicleName, value);
-    }
+    #endregion
 
-    public ObservableCollection<ServiceRecordDto> ServiceRecords { get; } = new();
+    #region Init
 
-    public ICommand OpenEditServiceRecordCommand { get; }
-
-    public ServiceHistoryViewModel(
-        IServiceRecordService serviceRecordService,
-        IVehicleService vehicleService)
+    public ServiceHistoryViewModel(IServiceRecordService serviceRecordService, IVehicleService vehicleService)
     {
         this.serviceRecordService = serviceRecordService;
         this.vehicleService = vehicleService;
@@ -41,6 +35,28 @@ public class ServiceHistoryViewModel : BaseViewModel, IQueryAttributable
 
         Title = "История на сервиз";
     }
+
+    #endregion
+
+    #region Properties
+
+    public string VehicleName
+    {
+        get => _vehicleName;
+        set => SetProperty(ref _vehicleName, value);
+    }
+
+    public ObservableCollection<ServiceRecordDto> ServiceRecords { get; } = new();
+
+    #endregion
+
+    #region Commands
+
+    public ICommand OpenEditServiceRecordCommand { get; }
+
+    #endregion
+
+    #region Methods
 
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
@@ -67,4 +83,6 @@ public class ServiceHistoryViewModel : BaseViewModel, IQueryAttributable
         foreach (var record in records)
             ServiceRecords.Add(record);
     }
+
+    #endregion
 }

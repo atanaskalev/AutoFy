@@ -7,11 +7,39 @@ namespace AutoFy.Mobile.ViewModels;
 
 public class CalendarViewModel : BaseViewModel
 {
+    #region Fields
+
     private readonly ICalendarService calendarService;
 
     private DateTime _selectedDate = DateTime.Today;
 
     private List<DateTime> eventDates = new();
+
+    #endregion
+
+    #region Init
+
+    public CalendarViewModel(ICalendarService calendarService)
+    {
+        this.calendarService = calendarService;
+
+        OpenEditReminderCommand = new Command<CalendarEventDto>(async calendarEvent =>
+        {
+            if (calendarEvent == null || !calendarEvent.ReminderId.HasValue)
+                return;
+
+            await Shell.Current.GoToAsync(
+                $"{nameof(Views.AddReminderView)}?ReminderId={calendarEvent.ReminderId.Value}");
+        });
+
+        Title = "Календар";
+
+        LoadEventsCommand = new Command(async () => await LoadEventsAsync());
+    }
+
+    #endregion
+
+    #region Properties
 
     public DateTime SelectedDate
     {
@@ -36,27 +64,16 @@ public class CalendarViewModel : BaseViewModel
 
     public ObservableCollection<string> EventDateTexts { get; } = new();
 
-    public ICommand LoadEventsCommand { get; }
+    #endregion
 
+    #region Commands
+
+    public ICommand LoadEventsCommand { get; }
     public ICommand OpenEditReminderCommand { get; }
 
-    public CalendarViewModel(ICalendarService calendarService)
-    {
-        this.calendarService = calendarService;
+    #endregion
 
-        OpenEditReminderCommand = new Command<CalendarEventDto>(async calendarEvent =>
-        {
-            if (calendarEvent == null || !calendarEvent.ReminderId.HasValue)
-                return;
-
-            await Shell.Current.GoToAsync(
-                $"{nameof(Views.AddReminderView)}?ReminderId={calendarEvent.ReminderId.Value}");
-        });
-
-        Title = "Календар";
-
-        LoadEventsCommand = new Command(async () => await LoadEventsAsync());
-    }
+    #region Methods
 
     private async Task LoadEventsAsync()
     {
@@ -93,4 +110,6 @@ public class CalendarViewModel : BaseViewModel
             IsBusy = false;
         }
     }
+
+    #endregion
 }

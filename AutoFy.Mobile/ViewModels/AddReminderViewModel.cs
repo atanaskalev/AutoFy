@@ -8,6 +8,8 @@ namespace AutoFy.Mobile.ViewModels;
 
 public class AddReminderViewModel : BaseViewModel, IQueryAttributable
 {
+    #region Fields
+
     private readonly IReminderService reminderService;
     private readonly IVehicleService vehicleService;
     private readonly INotificationSchedulerService notificationSchedulerService;
@@ -19,6 +21,28 @@ public class AddReminderViewModel : BaseViewModel, IQueryAttributable
     private ReminderType _selectedReminderType = ReminderType.Друго;
     private string _notes = string.Empty;
     private DateTime _reminderDate = DateTime.Today;
+
+    #endregion
+
+    #region Init
+
+    public AddReminderViewModel(
+        IReminderService reminderService,
+        IVehicleService vehicleService,
+        INotificationSchedulerService notificationSchedulerService)
+    {
+        this.reminderService = reminderService;
+        this.vehicleService = vehicleService;
+        this.notificationSchedulerService = notificationSchedulerService;
+
+        Title = "Добави напомняне";
+
+        SaveReminderCommand = new Command(async () => await SaveReminderAsync());
+        DeleteReminderCommand = new Command(async () => await DeleteReminderAsync());
+    }
+    #endregion
+
+    #region Properties
 
     public IEnumerable<ReminderType> ReminderTypes =>
         Enum.GetValues(typeof(ReminderType)).Cast<ReminderType>();
@@ -52,23 +76,16 @@ public class AddReminderViewModel : BaseViewModel, IQueryAttributable
 
     public bool IsEditMode => reminderId.HasValue;
 
+    #endregion
+
+    #region Commands
+
     public ICommand SaveReminderCommand { get; }
     public ICommand DeleteReminderCommand { get; }
 
-    public AddReminderViewModel(
-        IReminderService reminderService,
-        IVehicleService vehicleService,
-        INotificationSchedulerService notificationSchedulerService)
-    {
-        this.reminderService = reminderService;
-        this.vehicleService = vehicleService;
-        this.notificationSchedulerService = notificationSchedulerService;
+    #endregion
 
-        Title = "Добави напомняне";
-
-        SaveReminderCommand = new Command(async () => await SaveReminderAsync());
-        DeleteReminderCommand = new Command(async () => await DeleteReminderAsync());
-    }
+    #region Methods
 
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
@@ -202,4 +219,6 @@ public class AddReminderViewModel : BaseViewModel, IQueryAttributable
 
         await Shell.Current.GoToAsync("..");
     }
+
+    #endregion
 }

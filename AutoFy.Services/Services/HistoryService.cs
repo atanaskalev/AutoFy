@@ -6,6 +6,8 @@ namespace AutoFy.Services.Services;
 
 public class HistoryService : IHistoryService
 {
+    #region Fields
+
     private const string AllTypes = "Всички";
     private const string FuelType = "Гориво";
     private const string ServiceType = "Сервиз";
@@ -14,20 +16,22 @@ public class HistoryService : IHistoryService
     private readonly IFuelEntryRepository fuelEntryRepository;
     private readonly IServiceRecordRepository serviceRecordRepository;
 
-    public HistoryService(
-        IVehicleRepository vehicleRepository,
-        IFuelEntryRepository fuelEntryRepository,
-        IServiceRecordRepository serviceRecordRepository)
+    #endregion
+
+    #region Init
+
+    public HistoryService(IVehicleRepository vehicleRepository, IFuelEntryRepository fuelEntryRepository, IServiceRecordRepository serviceRecordRepository)
     {
         this.vehicleRepository = vehicleRepository;
         this.fuelEntryRepository = fuelEntryRepository;
         this.serviceRecordRepository = serviceRecordRepository;
     }
 
-    public async Task<IEnumerable<HistoryItemDto>> GetHistoryAsync(
-        int? vehicleId,
-        DateTime? date,
-        string historyType)
+    #endregion
+
+    #region Methods
+
+    public async Task<IEnumerable<HistoryItemDto>> GetHistoryAsync(int? vehicleId, DateTime? date, string historyType)
     {
         var vehicles = await vehicleRepository.GetAllAsync();
         var vehicleNames = vehicles.ToDictionary(
@@ -98,4 +102,6 @@ public class HistoryService : IHistoryService
             _ => "Друго"
         };
     }
+
+    #endregion
 }

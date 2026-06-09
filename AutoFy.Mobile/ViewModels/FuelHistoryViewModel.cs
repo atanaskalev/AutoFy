@@ -7,6 +7,8 @@ namespace AutoFy.Mobile.ViewModels;
 
 public class FuelHistoryViewModel : BaseViewModel, IQueryAttributable
 {
+    #region Fields
+
     private readonly IFuelService fuelService;
     private readonly IVehicleService vehicleService;
 
@@ -14,19 +16,11 @@ public class FuelHistoryViewModel : BaseViewModel, IQueryAttributable
 
     private string _vehicleName = string.Empty;
 
-    public string VehicleName
-    {
-        get => _vehicleName;
-        set => SetProperty(ref _vehicleName, value);
-    }
+    #endregion
 
-    public ObservableCollection<FuelEntryDto> FuelEntries { get; } = new();
+    #region Init
 
-    public ICommand OpenEditFuelEntryCommand { get; }
-
-    public FuelHistoryViewModel(
-        IFuelService fuelService,
-        IVehicleService vehicleService)
+    public FuelHistoryViewModel(IFuelService fuelService, IVehicleService vehicleService)
     {
         this.fuelService = fuelService;
         this.vehicleService = vehicleService;
@@ -42,6 +36,28 @@ public class FuelHistoryViewModel : BaseViewModel, IQueryAttributable
 
         Title = "История на зареждания";
     }
+
+    #endregion
+
+    #region Properties
+
+    public string VehicleName
+    {
+        get => _vehicleName;
+        set => SetProperty(ref _vehicleName, value);
+    }
+
+    public ObservableCollection<FuelEntryDto> FuelEntries { get; } = new();
+
+    #endregion
+
+    #region Commands
+
+    public ICommand OpenEditFuelEntryCommand { get; }
+
+    #endregion
+
+    #region Methods
 
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
@@ -68,4 +84,5 @@ public class FuelHistoryViewModel : BaseViewModel, IQueryAttributable
         foreach (var entry in entries)
             FuelEntries.Add(entry);
     }
+    #endregion
 }

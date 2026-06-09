@@ -5,8 +5,14 @@ namespace AutoFy.Mobile.ViewModels
 {
     public abstract class BaseViewModel : INotifyPropertyChanged
     {
+        #region Fields
+
         private string _title = string.Empty;
         private bool _isBusy;
+
+        #endregion
+
+        #region Properties
 
         public string Title
         {
@@ -20,7 +26,15 @@ namespace AutoFy.Mobile.ViewModels
             set => SetProperty(ref _isBusy, value);
         }
 
+        #endregion
+
+        #region Events
+
         public event PropertyChangedEventHandler? PropertyChanged;
+        
+        #endregion
+
+        #region Methods
 
         protected bool SetProperty<T>(
             ref T backingStore,
@@ -39,5 +53,7 @@ namespace AutoFy.Mobile.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        #endregion
     }
 }

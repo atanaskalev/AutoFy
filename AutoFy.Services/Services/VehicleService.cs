@@ -7,12 +7,22 @@ namespace AutoFy.Services.Services;
 
 public class VehicleService : IVehicleService
 {
+    #region Fields
+
     private readonly IVehicleRepository vehicleRepository;
+
+    #endregion
+
+    #region Init
 
     public VehicleService(IVehicleRepository vehicleRepository)
     {
         this.vehicleRepository = vehicleRepository;
     }
+
+    #endregion
+
+    #region Methods
 
     public async Task<IEnumerable<VehicleDto>> GetAllAsync()
     {
@@ -61,4 +71,6 @@ public class VehicleService : IVehicleService
 
         await vehicleRepository.DeleteAsync(vehicle);
     }
+
+    #endregion
 }

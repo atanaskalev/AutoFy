@@ -1,6 +1,5 @@
 ﻿using AutoFy.Services.DTOs;
 using AutoFy.Services.Interfaces;
-using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -8,19 +7,13 @@ namespace AutoFy.Mobile.ViewModels
 {
     public class HomeViewModel : BaseViewModel
     {
+        #region Fields
+
         private readonly IVehicleService vehicleService;
 
-        public ObservableCollection<VehicleDto> Vehicles { get; } = new();
+        #endregion
 
-        public int VehiclesCount => Vehicles.Count;
-
-        public ICommand OpenAboutCommand { get; }
-        public ICommand OpenMenuCommand { get; }
-        public ICommand OpenVehicleDetailsCommand { get; }
-        public ICommand OpenAddVehicleCommand { get; }
-
-        public ICommand LoadVehiclesCommand { get; }
-
+        #region Init
         public HomeViewModel(IVehicleService vehicleService)
         {
             this.vehicleService = vehicleService;
@@ -49,6 +42,28 @@ namespace AutoFy.Mobile.ViewModels
                 await LoadVehiclesAsync());
         }
 
+        #endregion
+
+        #region Properties
+
+        public ObservableCollection<VehicleDto> Vehicles { get; } = new();
+
+        public int VehiclesCount => Vehicles.Count;
+        
+        #endregion
+
+        #region Commands
+
+        public ICommand OpenAboutCommand { get; }
+        public ICommand OpenMenuCommand { get; }
+        public ICommand OpenVehicleDetailsCommand { get; }
+        public ICommand OpenAddVehicleCommand { get; }
+        public ICommand LoadVehiclesCommand { get; }
+
+        #endregion
+
+        #region Methods
+
         private async Task LoadVehiclesAsync()
         {
             if (IsBusy)
@@ -73,4 +88,6 @@ namespace AutoFy.Mobile.ViewModels
             }
         }
     }
+
+    #endregion
 }

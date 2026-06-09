@@ -6,19 +6,26 @@ namespace AutoFy.Services.Services;
 
 public class StatisticsService : IStatisticsService
 {
+    #region Fields
+
     private readonly IVehicleRepository vehicleRepository;
     private readonly IFuelEntryRepository fuelEntryRepository;
     private readonly IServiceRecordRepository serviceRecordRepository;
 
-    public StatisticsService(
-        IVehicleRepository vehicleRepository,
-        IFuelEntryRepository fuelEntryRepository,
-        IServiceRecordRepository serviceRecordRepository)
+    #endregion
+
+    #region Init
+
+    public StatisticsService(IVehicleRepository vehicleRepository, IFuelEntryRepository fuelEntryRepository, IServiceRecordRepository serviceRecordRepository)
     {
         this.vehicleRepository = vehicleRepository;
         this.fuelEntryRepository = fuelEntryRepository;
         this.serviceRecordRepository = serviceRecordRepository;
     }
+
+    #endregion
+
+    #region Methods
 
     public async Task<StatisticsSummaryDto> GetStatisticsAsync()
     {
@@ -68,4 +75,6 @@ public class StatisticsService : IStatisticsService
 
         return result;
     }
+
+    #endregion
 }

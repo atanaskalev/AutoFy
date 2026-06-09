@@ -8,15 +8,24 @@ namespace AutoFy.Data.Repositories.Base;
 public class Repository<T> : IRepository<T>
     where T : class, IEntity
 {
-    protected readonly AutoFyDbContext context;
+    #region Fields
 
+    protected readonly AutoFyDbContext context;
     protected readonly DbSet<T> dbSet;
+
+    #endregion
+
+    #region Init
 
     public Repository(AutoFyDbContext context)
     {
         this.context = context;
         dbSet = context.Set<T>();
     }
+
+    #endregion
+
+    #region Methods
 
     public virtual async Task<T?> GetByIdAsync(int id)
     {
@@ -47,4 +56,6 @@ public class Repository<T> : IRepository<T>
         dbSet.Remove(entity);
         await context.SaveChangesAsync();
     }
+
+    #endregion
 }

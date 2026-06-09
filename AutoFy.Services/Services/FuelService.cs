@@ -8,12 +8,22 @@ namespace AutoFy.Services.Services;
 
 public class FuelService : IFuelService
 {
+    #region Fields
+
     private readonly IFuelEntryRepository fuelEntryRepository;
+
+    #endregion
+
+    #region Init
 
     public FuelService(IFuelEntryRepository fuelEntryRepository)
     {
         this.fuelEntryRepository = fuelEntryRepository;
     }
+
+    #endregion
+
+    #region Methods
 
     public async Task<IEnumerable<FuelEntryDto>> GetFuelEntriesByVehicleIdAsync(int vehicleId)
     {
@@ -131,4 +141,6 @@ public class FuelService : IFuelService
 
         await fuelEntryRepository.DeleteAsync(fuelEntry);
     }
+
+    #endregion
 }

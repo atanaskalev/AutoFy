@@ -7,6 +7,8 @@ namespace AutoFy.Mobile.ViewModels;
 
 public class HistoryViewModel : BaseViewModel
 {
+    #region Fields
+
     private readonly IHistoryService historyService;
     private readonly IVehicleService vehicleService;
 
@@ -14,6 +16,25 @@ public class HistoryViewModel : BaseViewModel
     private string selectedHistoryType = "Всички";
     private DateTime selectedDate = DateTime.Today;
     private bool useDateFilter;
+
+    #endregion
+
+    #region Init
+    public HistoryViewModel(IHistoryService historyService, IVehicleService vehicleService)
+    {
+        this.historyService = historyService;
+        this.vehicleService = vehicleService;
+
+        Title = "История";
+
+        LoadHistoryCommand = new Command(async () => await LoadHistoryAsync());
+        ClearFiltersCommand = new Command(async () => await ClearFiltersAsync());
+        InitializeCommand = new Command(async () => await InitializeAsync());
+    }
+
+    #endregion
+
+    #region Properties
 
     public ObservableCollection<HistoryItemDto> HistoryItems { get; } = new();
 
@@ -66,23 +87,17 @@ public class HistoryViewModel : BaseViewModel
         }
     }
 
+    #endregion
+
+    #region Commands
+
     public ICommand LoadHistoryCommand { get; }
     public ICommand ClearFiltersCommand { get; }
     public ICommand InitializeCommand { get; }
 
-    public HistoryViewModel(
-        IHistoryService historyService,
-        IVehicleService vehicleService)
-    {
-        this.historyService = historyService;
-        this.vehicleService = vehicleService;
+    #endregion
 
-        Title = "История";
-
-        LoadHistoryCommand = new Command(async () => await LoadHistoryAsync());
-        ClearFiltersCommand = new Command(async () => await ClearFiltersAsync());
-        InitializeCommand = new Command(async () => await InitializeAsync());
-    }
+    #region Methods
 
     public async Task InitializeAsync()
     {
@@ -134,4 +149,6 @@ public class HistoryViewModel : BaseViewModel
 
         await LoadHistoryAsync();
     }
+
+    #endregion
 }
